@@ -65,13 +65,12 @@ fun OnboardingRigorScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            TopBar()
 
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = 24.dp)
-                    .padding(top = 24.dp)
+                    .padding(top = 16.dp)
             ) {
                 // 3. Uso de stringResource para los textos principales de la pantalla
                 Text(
@@ -138,19 +137,6 @@ fun OnboardingRigorScreen(
     }
 }
 
-@Composable
-private fun TopBar() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp)
-            .padding(top = 32.dp, bottom = 16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Spacer(modifier = Modifier.width(24.dp))
-    }
-}
 
 @Composable
 private fun RigorCard(
@@ -179,7 +165,7 @@ private fun RigorCard(
             .padding(24.dp)
     ) {
         Column {
-            // 4. Se eliminó por completo el Row vacío y los iconos invisibles, resolviendo el cuello de botella
+
             Text(
                 text = stringResource(id = opcion.tituloRes),
                 fontSize = 24.sp,

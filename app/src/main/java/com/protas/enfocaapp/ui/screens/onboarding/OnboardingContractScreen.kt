@@ -287,7 +287,8 @@ private fun FirmaButton(
     firmado: Boolean,
     onFirmado: () -> Unit
 ) {
-    var progreso by remember { mutableFloatStateOf(0f) }
+    // Usamos Animatable para una gestión de hilos y frames nativa y eficiente
+    val progreso = remember { Animatable(0f) }
     var presionando by remember { mutableStateOf(false) }
 
     val escala by animateFloatAsState(
@@ -301,16 +302,17 @@ private fun FirmaButton(
 
     LaunchedEffect(presionando) {
         if (presionando && !firmado) {
-            while (presionando && progreso < 1f) {
-                progreso += 0.02f
-                delay(20)
-                if (progreso >= 1f) {
-                    onFirmado()
-                    presionando = false
-                }
+            // Animación fluida de 0 a 1 sincronizada con los Hz de la pantalla
+            progreso.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(durationMillis = 1000, easing = LinearEasing)
+            )
+            if (progreso.value >= 1f) {
+                onFirmado()
             }
-        } else if (!presionando) {
-            if (progreso < 1f) progreso = 0f
+        } else if (!presionando && !firmado) {
+            // Retorno fluido a la posición inicial si se interrumpe la presión
+            progreso.animateTo(0f, tween(durationMillis = 200))
         }
     }
 
@@ -341,7 +343,7 @@ private fun FirmaButton(
                 drawArc(
                     color = primaryColor,
                     startAngle = -90f,
-                    sweepAngle = 360f * progreso,
+                    sweepAngle = 360f * progreso.value, // Lectura optimizada del valor animado
                     useCenter = false,
                     style = stroke
                 )
