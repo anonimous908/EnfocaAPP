@@ -5,12 +5,12 @@
 <string name="onboarding_rigor_description">Selecciona la intensidad de la friccion. Puedes cambiarlo después.</string>
 <string name="onboarding_rigor_btn_establish">ESTABLECER RIGOR</string>
 
-<string name="rigor_moderado_title">Moderado</string>
-<string name="rigor_moderado_desc">Fricción sutil. Recordatorios gentiles.</string>
+<string name="rigor_moderado_title">Basico</string>
+<string name="rigor_moderado_desc">Empecemos con algo sencillo</string>
 
-<string name="rigor_estricto_title">Estricto</string>
-<string name="rigor_estricto_desc">Retrasos obligatorios al abrir apps problemáticas.</string>
+<string name="rigor_estricto_title">Moderado</string>
+<string name="rigor_estricto_desc">Fricción y retrasos al abrir apps.</string>
 
-<string name="rigor_quirurgico_title">Quirúrgico</string>
-<string name="rigor_quirurgico_desc">Fricción agresiva y bloqueos totales.</string>
+<string name="rigor_quirurgico_title">Extremo</string>
+<string name="rigor_quirurgico_desc">Bloquear todas las apps.</string>
 </resources>
