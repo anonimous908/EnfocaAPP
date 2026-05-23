@@ -63,4 +63,6 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.compose.material.icons)
+    // Añadir soporte para cifrado en el almacenamiento local
+    implementation(libs.androidx.security.crypto)
 }

@@ -26,7 +26,7 @@ import com.protas.enfocaapp.ui.theme.DopaminaSurfaceContainerLow
 import com.protas.enfocaapp.ui.theme.EnfocaAPPTheme
 
 @Composable
-fun OnboardingStatsScreen(
+fun OnboardingInfoScreen(
     onEnfrentarRealidad: () -> Unit = {}
 ) {
     Box(
@@ -41,11 +41,11 @@ fun OnboardingStatsScreen(
                 .padding(vertical = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.height(50.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = stringResource(id = R.string.onboarding_Stats_Screen),
-                fontSize = 32.sp,
+                text = stringResource(id = R.string.onboarding_info_title),
+                fontSize = 38.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
@@ -57,33 +57,16 @@ fun OnboardingStatsScreen(
 
             Text(
 
-                text = stringResource(id = R.string.onboarding_Stats_Screen_descripcion),
-                fontSize = 18.sp,
+                text = stringResource(id = R.string.onboarding_info_descripcion),
+                fontSize = 20.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
                 lineHeight = 28.sp
             )
 
-            Spacer(modifier = Modifier.height(96.dp))
+            Spacer(modifier = Modifier.height(284.dp))
 
-            StatCard(
-                icon = Icons.Filled.Schedule,
-                stat = stringResource(id = R.string.onboarding_stats_time_value),
-                statColor = MaterialTheme.colorScheme.primary,
-                label = stringResource(id = R.string.onboarding_stats_time_label),
-                highlight = true
-            )
 
-            Spacer(modifier = Modifier.height(42.dp))
-
-            StatCard(
-                icon = Icons.Filled.LockOpen,
-                stat = stringResource(id = R.string.onboarding_stats_unlocks_value),
-                statColor = MaterialTheme.colorScheme.onSurface,
-                label = stringResource(id = R.string.onboarding_stats_unlocks_label),
-                highlight = false
-            )
-            Spacer(modifier = Modifier.height(64.dp))
 
 
             Button(
@@ -114,70 +97,10 @@ fun OnboardingStatsScreen(
     }
 }
 
-@Composable
-private fun StatCard(
-    icon: ImageVector,
-    stat: String,
-    statColor: Color,
-    label: String,
-    highlight: Boolean
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
-            .background(DopaminaSurfaceContainerLow)
-            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp))
-            .padding(16.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        if (highlight) {
-            Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.05f))
-            )
-        }
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.outlineVariant,
-                modifier = Modifier.size(36.dp)
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = stat,
-                fontSize = 40.sp,
-                fontWeight = FontWeight.Bold,
-                color = statColor,
-                letterSpacing = (-0.02).sp
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Text(
-                text = label.uppercase(),
-                fontSize = 12.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                letterSpacing = 0.1.sp
-            )
-        }
-    }
-}
-
-
-
 @Preview(showBackground = true, backgroundColor = 0xFF131313)
 @Composable
 private fun PreviewOnboardingStatsScreen() {
     EnfocaAPPTheme {
-        OnboardingStatsScreen()
+        OnboardingInfoScreen()
     }
 }

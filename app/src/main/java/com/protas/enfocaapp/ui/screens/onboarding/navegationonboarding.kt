@@ -13,8 +13,8 @@ fun OnboardingPagerScreen(
     onFinishOnboarding: () -> Unit,
     onRigorSelected: (NivelRigor) -> Unit = {} // Callback para guardar el nivel elegido en DataStore/ViewModel
 ) {
-    // Definimos las 4 páginas del flujo de onboarding
-    val pagerState = rememberPagerState(pageCount = { 4 })
+    // Definimos las  páginas del flujo de onboarding
+    val pagerState = rememberPagerState(pageCount = { 5 })
     val coroutineScope = rememberCoroutineScope()
 
     HorizontalPager(
@@ -37,21 +37,28 @@ fun OnboardingPagerScreen(
                 }
             )
 
-            // Página 2: Selección del Nivel de Rigor
-            2 -> OnboardingRigorScreen(
-                onEstablecerRigor = { nivel ->
-                    onRigorSelected(nivel) // Captura el nivel (MODERADO, ESTRICTO, QUIRÚRGICO) y lo propaga
+            // Página 2: Información de Enfoque
+            2 -> OnboardingInfoScreen(
+                onEnfrentarRealidad= {
                     coroutineScope.launch { pagerState.animateScrollToPage(3) }
                 }
             )
 
-            // Página 3: Contrato de Compromiso y Cierre
-            3 -> OnboardingContractScreen(
+            // Página 3: Selección del Nivel de Rigor
+            3 -> OnboardingRigorScreen(
+                onEstablecerRigor = { nivel ->
+                    onRigorSelected(nivel) // Captura el nivel (MODERADO, ESTRICTO, QUIRÚRGICO) y lo propaga
+                    coroutineScope.launch { pagerState.animateScrollToPage(4) }
+                }
+            )
+
+            // Página 4: Contrato de Compromiso y Cierre
+            4 -> OnboardingContractScreen(
                 onFirmarContrato = {
                     onFinishOnboarding()
                 },
                 onAtras = {
-                    coroutineScope.launch { pagerState.animateScrollToPage(2) }
+                    coroutineScope.launch { pagerState.animateScrollToPage(3) }
                 }
             )
         }

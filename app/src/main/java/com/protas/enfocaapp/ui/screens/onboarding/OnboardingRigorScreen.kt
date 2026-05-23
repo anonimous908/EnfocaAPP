@@ -40,11 +40,6 @@ private val opciones = listOf(
         descripcionRes = R.string.rigor_moderado_desc
     ),
     RigorOption(
-        nivel = NivelRigor.ESTRICTO,
-        tituloRes = R.string.rigor_estricto_title,
-        descripcionRes = R.string.rigor_estricto_desc
-    ),
-    RigorOption(
         nivel = NivelRigor.QUIRURGICO,
         tituloRes = R.string.rigor_quirurgico_title,
         descripcionRes = R.string.rigor_quirurgico_desc
@@ -99,7 +94,7 @@ fun OnboardingRigorScreen(
                         isSelected = seleccionado == opcion.nivel,
                         onClick = { seleccionado = opcion.nivel }
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(26.dp))
                 }
             }
 
@@ -119,7 +114,7 @@ fun OnboardingRigorScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
-                    shape = RoundedCornerShape(2.dp),
+                    shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         contentColor = Color.White
@@ -162,7 +157,7 @@ private fun RigorCard(
             .background(bgColor)
             .border(1.dp, borderColor, RoundedCornerShape(8.dp))
             .clickable { onClick() }
-            .padding(24.dp)
+            .padding(50.dp)
     ) {
         Column {
 

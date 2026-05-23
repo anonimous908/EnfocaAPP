@@ -1,7 +1,15 @@
 <resources>
-<string name="app_name">EnfocaAPP</string>
+<string name="app_name">Dopamina Guard</string>
+    <string name="onboarding_rigor_title">Nivel de Rigor</string>
 
-<string name="onboarding_rigor_title">Nivel de Rigor</string>
+
+<string name="onboarding_introduccion_title">Recupera tu atencion. deja de vivir de las redes</string>
+    <string name="onboarding_introduccion_description">Tu tiempo en TikTok,Instagram  y Youtube te estan robando la vida. Toma el control y construye tu mejor version</string>
+    <string name="onboarding_Stats_Screen"> Sabías que pasas 9 horas diarias en tu celular?</string>
+    <string name="onboarding_info_title"> Así te ayudamos</string>
+    <string name="onboarding_info_descripcion"> Dopamine Guard combina fricción inteligente cuando intentas usar redes con recompensas reales cuando mantienes el control.Límites diarios en TikTok, Instagram, YouTube y más Fricción ligera que te hace pensar dos veces Gana puntos por cada hora recuperada Construye y observa crecer tu Ciudad Enfocada</string>
+
+    <string name="onboarding_Stats_Screen_descripcion"> Al promedio, desbloqueas tu dispositivo 103 veces al día</string>
 <string name="onboarding_rigor_description">Selecciona la intensidad de la friccion. Puedes cambiarlo después.</string>
 <string name="onboarding_rigor_btn_establish">ESTABLECER RIGOR</string>
 
@@ -13,4 +21,27 @@
 
 <string name="rigor_quirurgico_title">Extremo</string>
 <string name="rigor_quirurgico_desc">Bloquear todas las apps.</string>
+    <string name="onboarding_next_button">Siguiente</string>
+    <string name="onboarding_stats_time_value">9h</string>
+    <string name="onboarding_stats_time_label">Tiempo de Pantalla Diario</string>
+    <string name="onboarding_stats_unlocks_value">103x</string>
+    <string name="onboarding_stats_unlocks_label">Desbloqueos Diarios</string>
+    <string name="onboarding_btn_face_reality">ENFRENTAR REALIDAD</string>
+    <string name="onboarding_contract_title">Términos y condiciones</string>
+    <string name="onboarding_contract_subtitle">¿Listo para recuperar tu atención?</string>
+    <string name="onboarding_contract_btn_sign">FIRMAR CONTRATO</string>
+    <string name="onboarding_contract_privacy">POLÍTICA DE PRIVACIDAD</string>
+    <string name="onboarding_contract_text_1">En</string>
+    <string name="onboarding_contract_text_2">Dopamina Guard</string>
+    <string name="onboarding_contract_text_3">Cada día que cumplas tu meta, tu ciudad crecerá.\nTu avatar mejorará...\nY sobre todo… recuperarás tu tiempo y tu mente.\n\nMiles de personas ya están rompiendo su adicción a las redes.\nTú puedes ser el siguiente.</string>
+    <string name="onboarding_contract_point1_title">Procesamiento On-Device</string>
+    <string name="onboarding_contract_point1_desc">Los algoritmos de análisis de comportamiento operan exclusivamente en el hardware de tu teléfono.</string>
+    <string name="onboarding_contract_point2_title">Transparencia Total</string>
+    <string name="onboarding_contract_point2_desc">No existen rastreadores de terceros ni integración con redes publicitarias.</string>
+    <string name="onboarding_contract_point3_title">Propiedad de Datos</string>
+    <string name="onboarding_contract_point3_desc">No recolectamos tus datos</string>
+    <string name="onboarding_contract_quote">"La disciplina es el puente entre las metas y los logros."</string>
+    <string name="onboarding_contract_signing">Firmando...</string>
+    <string name="onboarding_contract_hold">Mantén\npulsado</string>
+    <string name="onboarding_contract_signed">Firmado</string>
 </resources>

@@ -40,6 +40,8 @@ import com.protas.enfocaapp.ui.theme.DopaminaSurfaceContainerHighest
 import com.protas.enfocaapp.ui.theme.DopaminaSurfaceContainerLow
 import com.protas.enfocaapp.ui.theme.EnfocaAPPTheme
 import kotlinx.coroutines.delay
+import androidx.compose.ui.res.stringResource
+import com.protas.enfocaapp.R
 
 @Composable
 fun OnboardingContractScreen(
@@ -75,8 +77,8 @@ fun OnboardingContractScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Contrato de Compromiso",
-                    fontSize = 32.sp,
+                    text = stringResource(id = R.string.onboarding_contract_title),
+                    fontSize = 26.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
                     letterSpacing = (-0.02).sp
@@ -85,7 +87,7 @@ fun OnboardingContractScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Un pacto formal con tu futuro yo.",
+                    text = stringResource(id = R.string.onboarding_contract_subtitle),
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -129,7 +131,7 @@ fun OnboardingContractScreen(
                     )
                 ) {
                     Text(
-                        text = "FIRMAR CONTRATO",
+                        text = stringResource(id = R.string.onboarding_contract_btn_sign),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.SemiBold,
                         letterSpacing = 0.1.sp
@@ -169,7 +171,7 @@ private fun ContratoHeader(onAtras: () -> Unit) {
 
 
         Text(
-            text = "Enfocapp",
+            text = stringResource(id = R.string.app_name),
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface,
@@ -202,7 +204,7 @@ private fun ContratoCard() {
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "POLÍTICA DE PRIVACIDAD RADICAL",
+                text = stringResource(id = R.string.onboarding_contract_privacy),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -221,11 +223,11 @@ private fun ContratoCard() {
 
         Text(
             text = buildAnnotatedString {
-                append("En ")
+                append(stringResource(id = R.string.onboarding_contract_text_1))
                 withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)) {
-                    append("Enfocapp")
+                    append(stringResource(id = R.string.onboarding_contract_text_2))
                 }
-                append(", tu privacidad no es negociable. No usamos, no vendemos ni recolectamos tus datos personales. Toda tu información de uso se procesa localmente en tu dispositivo y nunca sale de él. Tu disciplina es un asunto privado.")
+                append(stringResource(id = R.string.onboarding_contract_text_3))
             },
             fontSize = 16.sp,
             color = MaterialTheme.colorScheme.onSurface,
@@ -235,10 +237,10 @@ private fun ContratoCard() {
         Spacer(modifier = Modifier.height(16.dp))
 
         val puntos = listOf(
-            "Procesamiento On-Device" to "Los algoritmos de análisis de comportamiento operan exclusivamente en el hardware de tu teléfono.",
-            "Cifrado de Extremo a Extremo" to "Cualquier estadística generada está protegida por llaves de seguridad que solo tú posees.",
-            "Transparencia Total" to "No existen rastreadores de terceros ni integración con redes publicitarias.",
-            "Propiedad de Datos" to "Tú eres el único dueño de tu historial de enfoque. Puedes borrarlo permanentemente en cualquier momento."
+            stringResource(id = R.string.onboarding_contract_point1_title) to stringResource(id = R.string.onboarding_contract_point1_desc),
+
+            stringResource(id = R.string.onboarding_contract_point2_title) to stringResource(id = R.string.onboarding_contract_point2_desc),
+            stringResource(id = R.string.onboarding_contract_point3_title) to stringResource(id = R.string.onboarding_contract_point3_desc)
         )
 
         puntos.forEach { (titulo, desc) ->
@@ -272,7 +274,7 @@ private fun ContratoCard() {
                 .padding(start = 12.dp)
         ) {
             Text(
-                text = "\"La disciplina es el puente entre las metas y los logros.\"",
+                text = stringResource(id = R.string.onboarding_contract_quote),
                 fontSize = 16.sp,
                 fontStyle = FontStyle.Italic,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -353,7 +355,7 @@ private fun FirmaButton(
         if (firmado) {
             Icon(
                 imageVector = Icons.Outlined.CheckCircle,
-                contentDescription = "Firmado",
+                contentDescription = stringResource(id = R.string.onboarding_contract_signed),
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(48.dp)
             )
@@ -367,7 +369,7 @@ private fun FirmaButton(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = if (presionando) "Firmando..." else "Mantén\npulsado",
+                    text = if (presionando) stringResource(id = R.string.onboarding_contract_signing) else stringResource(id = R.string.onboarding_contract_hold),
                     fontSize = 11.sp,
                     color = if (presionando) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                     fontWeight = FontWeight.SemiBold,

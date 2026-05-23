@@ -12,6 +12,8 @@ hilt = "2.59.2"
 navigation = "2.7.7"
 datastore = "1.0.0"
 lifecycleViewModel = "2.6.1"
+securityCrypto = "1.1.0-alpha06"
+tink = "1.8.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,6 +37,9 @@ hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-com
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 androidx-compose-material-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
+# Para Jetpack Security
+androidx-security-crypto = { group = "androidx.security", name = "security-crypto-ktx", version.ref = "securityCrypto" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

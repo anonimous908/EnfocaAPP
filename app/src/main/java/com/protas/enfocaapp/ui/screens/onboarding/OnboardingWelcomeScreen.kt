@@ -17,11 +17,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.protas.enfocaapp.R
 import com.protas.enfocaapp.ui.theme.EnfocaAPPTheme
 
 // ─── Pantalla ─────────────────────────────────────────────────────────────────
@@ -62,7 +64,7 @@ fun OnboardingWelcomeScreen(
 
             // ── Texto ──
             Text(
-                text = "Enfocapp",
+                text = stringResource(id = R.string.onboarding_introduccion_title),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground,
@@ -73,7 +75,7 @@ fun OnboardingWelcomeScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Tu tiempo te pertenece.\n Tómalo de vuelta.",
+                text = stringResource(id = R.string.onboarding_introduccion_description),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Normal,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -101,7 +103,7 @@ fun OnboardingWelcomeScreen(
                 )
             ) {
                 Text(
-                    text = "Siguiente",
+                    text = stringResource(id = R.string.onboarding_next_button),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.SemiBold,
                     letterSpacing = 0.1.sp
