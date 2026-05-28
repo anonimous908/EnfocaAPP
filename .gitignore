@@ -13,3 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Documentación local privada
+DOCUMENTACION_PROYECTO.md
+EXPLICACION_CODIGO.md

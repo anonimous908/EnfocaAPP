@@ -20,30 +20,14 @@ fun EnfocaNavGraph(navController: NavHostController) {
         composable(Screen.OnboardingWelcome.route) {  //start Destinatation
             OnboardingPagerScreen(
                 onFinishOnboarding = {
-                    navController.navigate(Screen.Dashboard.route) {
+                    navController.navigate(Screen.Main.route) {
                         popUpTo(Screen.OnboardingWelcome.route) { inclusive = true }
                     }
                 }
             )
         }
-        composable(Screen.Dashboard.route) {
-            PlaceholderScreen("Dashboard")
+        composable(Screen.Main.route) {
+            com.protas.enfocaapp.ui.screens.main.MainScreen()
         }
-        composable(Screen.Limits.route) {
-            PlaceholderScreen("Limits")
-        }
-        composable(Screen.Focus.route) {
-            PlaceholderScreen("Focus")
-        }
-        composable(Screen.Intervention.route) {
-            PlaceholderScreen("Intervention")
-        }
-    }
-}
-
-@Composable
-private fun PlaceholderScreen(title: String) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = title)
     }
 }

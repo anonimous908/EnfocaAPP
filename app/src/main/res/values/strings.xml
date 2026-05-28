@@ -44,4 +44,8 @@
     <string name="onboarding_contract_signing">Firmando...</string>
     <string name="onboarding_contract_hold">Mantén\npulsado</string>
     <string name="onboarding_contract_signed">Firmado</string>
+    <string name="nav_home">Inicio</string>
+    <string name="nav_stats">Estadísticas</string>
+    <string name="nav_app_block">Bloqueo de apps</string>
+    <string name="nav_settings">Ajustes</string>
 </resources>

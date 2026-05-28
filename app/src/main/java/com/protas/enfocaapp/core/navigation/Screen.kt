@@ -2,8 +2,9 @@ package com.protas.enfocaapp.core.navigation
 
 sealed class Screen(val route: String) {
     object OnboardingWelcome : Screen("onboarding_welcome")
-    object Dashboard : Screen("dashboard")
-    object Limits : Screen("limits")
-    object Focus : Screen("focus")
-    object Intervention : Screen("intervention")
+    object Main : Screen("main")
+    object Home : Screen("home")
+    object Stats : Screen("stats")
+    object AppBlock : Screen("app_block")
+    object Settings : Screen("settings")
 }
