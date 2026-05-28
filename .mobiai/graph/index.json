@@ -1,0 +1,652 @@
+{
+  "version": 1,
+  "generatedAt": "2026-05-27T00:19:49.2155109Z",
+  "root": "C:\\Users\\borge\\AndroidStudioProjects\\EnfocaAPP2",
+  "files": [
+    {
+      "path": "app/src/androidTest/java/com/protas/enfocaapp/ExampleInstrumentedTest.kt",
+      "language": "kotlin",
+      "lines": 24,
+      "imports": [
+        "androidx.test.platform.app.InstrumentationRegistry",
+        "androidx.test.ext.junit.runners.AndroidJUnit4",
+        "org.junit.Test",
+        "org.junit.runner.RunWith",
+        "org.junit.Assert.*"
+      ],
+      "symbols": [
+        {
+          "name": "ExampleInstrumentedTest",
+          "kind": "class",
+          "line": 17
+        },
+        {
+          "name": "useAppContext",
+          "kind": "fun",
+          "line": 19,
+          "container": "ExampleInstrumentedTest"
+        }
+      ]
+    },
+    {
+      "path": "app/src/main/java/com/protas/enfocaapp/EnfocaApplication.kt",
+      "language": "kotlin",
+      "lines": 8,
+      "imports": [
+        "android.app.Application",
+        "dagger.hilt.android.HiltAndroidApp"
+      ],
+      "symbols": [
+        {
+          "name": "EnfocaApplication",
+          "kind": "class",
+          "line": 7
+        }
+      ]
+    },
+    {
+      "path": "app/src/main/java/com/protas/enfocaapp/MainActivity.kt",
+      "language": "kotlin",
+      "lines": 36,
+      "imports": [
+        "android.os.Bundle",
+        "androidx.activity.ComponentActivity",
+        "androidx.activity.compose.setContent",
+        "androidx.activity.enableEdgeToEdge",
+        "androidx.compose.foundation.layout.fillMaxSize",
+        "androidx.compose.foundation.layout.padding",
+        "androidx.compose.material3.Scaffold",
+        "androidx.compose.material3.Text",
+        "androidx.compose.foundation.layout.Box",
+        "androidx.compose.runtime.Composable",
+        "androidx.compose.ui.Modifier",
+        "androidx.compose.ui.tooling.preview.Preview",
+        "androidx.navigation.compose.rememberNavController",
+        "com.protas.enfocaapp.core.navigation.EnfocaNavGraph",
+        "com.protas.enfocaapp.ui.theme.EnfocaAPPTheme",
+        "dagger.hilt.android.AndroidEntryPoint"
+      ],
+      "symbols": [
+        {
+          "name": "MainActivity",
+          "kind": "class",
+          "line": 21
+        },
+        {
+          "name": "onCreate",
+          "kind": "fun",
+          "line": 22,
+          "container": "MainActivity",
+          "modifiers": [
+            "override"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app/src/main/java/com/protas/enfocaapp/core/di/SecurityModule.kt",
+      "language": "kotlin",
+      "lines": 42,
+      "imports": [
+        "android.content.Context",
+        "android.content.SharedPreferences",
+        "androidx.security.crypto.EncryptedSharedPreferences",
+        "androidx.security.crypto.MasterKey",
+        "dagger.Module",
+        "dagger.Provides",
+        "dagger.hilt.InstallIn",
+        "dagger.hilt.android.qualifiers.ApplicationContext",
+        "dagger.hilt.components.SingletonComponent",
+        "javax.inject.Singleton"
+      ],
+      "symbols": [
+        {
+          "name": "SecurityModule",
+          "kind": "object",
+          "line": 16
+        },
+        {
+          "name": "provideMasterKey",
+          "kind": "fun",
+          "line": 21,
+          "container": "SecurityModule"
+        },
+        {
+          "name": "provideEncryptedSharedPreferences",
+          "kind": "fun",
+          "line": 30,
+          "container": "SecurityModule"
+        }
+      ]
+    },
+    {
+      "path": "app/src/main/java/com/protas/enfocaapp/core/navigation/NavGraph.kt",
+      "language": "kotlin",
+      "lines": 49,
+      "imports": [
+        "androidx.compose.foundation.layout.Box",
+        "androidx.compose.foundation.layout.fillMaxSize",
+        "androidx.compose.material3.Text",
+        "androidx.compose.runtime.Composable",
+        "androidx.compose.ui.Alignment",
+        "androidx.compose.ui.Modifier",
+        "androidx.navigation.NavHostController",
+        "androidx.navigation.compose.NavHost",
+        "androidx.navigation.compose.composable",
+        "com.protas.enfocaapp.ui.screens.onboarding.OnboardingPagerScreen"
+      ],
+      "symbols": [
+        {
+          "name": "EnfocaNavGraph",
+          "kind": "fun",
+          "line": 15
+        },
+        {
+          "name": "PlaceholderScreen",
+          "kind": "fun",
+          "line": 45,
+          "modifiers": [
+            "private"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app/src/main/java/com/protas/enfocaapp/core/navigation/Screen.kt",
+      "language": "kotlin",
+      "lines": 9,
+      "imports": [],
+      "symbols": [
+        {
+          "name": "Screen",
+          "kind": "class",
+          "line": 3,
+          "modifiers": [
+            "sealed"
+          ]
+        },
+        {
+          "name": "OnboardingWelcome",
+          "kind": "object",
+          "line": 4,
+          "container": "Screen"
+        },
+        {
+          "name": "Dashboard",
+          "kind": "object",
+          "line": 5,
+          "container": "Screen"
+        },
+        {
+          "name": "Limits",
+          "kind": "object",
+          "line": 6,
+          "container": "Screen"
+        },
+        {
+          "name": "Focus",
+          "kind": "object",
+          "line": 7,
+          "container": "Screen"
+        },
+        {
+          "name": "Intervention",
+          "kind": "object",
+          "line": 8,
+          "container": "Screen"
+        }
+      ]
+    },
+    {
+      "path": "app/src/main/java/com/protas/enfocaapp/core/repository/UserPreferencesRepository.kt",
+      "language": "kotlin",
+      "lines": 21,
+      "imports": [
+        "android.content.SharedPreferences",
+        "javax.inject.Inject",
+        "javax.inject.Singleton"
+      ],
+      "symbols": [
+        {
+          "name": "UserPreferencesRepository",
+          "kind": "class",
+          "line": 8
+        },
+        {
+          "name": "saveSensitiveData",
+          "kind": "fun",
+          "line": 12
+        },
+        {
+          "name": "getSensitiveData",
+          "kind": "fun",
+          "line": 17
+        }
+      ]
+    },
+    {
+      "path": "app/src/main/java/com/protas/enfocaapp/ui/screens/onboarding/OnboardingContractScreen.kt",
+      "language": "kotlin",
+      "lines": 391,
+      "imports": [
+        "androidx.compose.animation.animateColorAsState",
+        "androidx.compose.animation.core.*",
+        "androidx.compose.foundation.Canvas",
+        "androidx.compose.foundation.background",
+        "androidx.compose.foundation.border",
+        "androidx.compose.foundation.gestures.detectTapGestures",
+        "androidx.compose.foundation.layout.*",
+        "androidx.compose.foundation.rememberScrollState",
+        "androidx.compose.foundation.shape.CircleShape",
+        "androidx.compose.foundation.shape.RoundedCornerShape",
+        "androidx.compose.foundation.verticalScroll",
+        "androidx.compose.material.icons.Icons",
+        "androidx.compose.material.icons.automirrored.outlined.ArrowBack",
+        "androidx.compose.material.icons.automirrored.outlined.ArrowForward",
+        "androidx.compose.material.icons.outlined.CheckCircle",
+        "androidx.compose.material.icons.outlined.Description",
+        "androidx.compose.material.icons.outlined.Gavel",
+        "androidx.compose.material.icons.outlined.Lock",
+        "androidx.compose.material3.*",
+        "androidx.compose.runtime.*",
+        "androidx.compose.ui.Alignment",
+        "androidx.compose.ui.Modifier",
+        "androidx.compose.ui.draw.clip",
+        "androidx.compose.ui.draw.scale",
+        "androidx.compose.ui.graphics.Color",
+        "androidx.compose.ui.graphics.StrokeCap",
+        "androidx.compose.ui.graphics.drawscope.Stroke",
+        "androidx.compose.ui.input.pointer.pointerInput",
+        "androidx.compose.ui.text.SpanStyle",
+        "androidx.compose.ui.text.buildAnnotatedString",
+        "androidx.compose.ui.text.font.FontStyle",
+        "androidx.compose.ui.text.font.FontWeight",
+        "androidx.compose.ui.text.withStyle",
+        "androidx.compose.ui.tooling.preview.Preview",
+        "androidx.compose.ui.unit.dp",
+        "androidx.compose.ui.unit.sp",
+        "com.protas.enfocaapp.ui.theme.DopaminaSurfaceContainerHighest",
+        "com.protas.enfocaapp.ui.theme.DopaminaSurfaceContainerLow",
+        "com.protas.enfocaapp.ui.theme.EnfocaAPPTheme",
+        "kotlinx.coroutines.delay",
+        "androidx.compose.ui.res.stringResource",
+        "com.protas.enfocaapp.R"
+      ],
+      "symbols": [
+        {
+          "name": "OnboardingContractScreen",
+          "kind": "fun",
+          "line": 47
+        },
+        {
+          "name": "ContratoHeader",
+          "kind": "fun",
+          "line": 157,
+          "modifiers": [
+            "private"
+          ]
+        },
+        {
+          "name": "ContratoCard",
+          "kind": "fun",
+          "line": 186,
+          "modifiers": [
+            "private"
+          ]
+        },
+        {
+          "name": "FirmaButton",
+          "kind": "fun",
+          "line": 289,
+          "modifiers": [
+            "private"
+          ]
+        },
+        {
+          "name": "PreviewOnboardingContractScreen",
+          "kind": "fun",
+          "line": 387,
+          "modifiers": [
+            "private"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app/src/main/java/com/protas/enfocaapp/ui/screens/onboarding/OnboardingInfoScreen.kt",
+      "language": "kotlin",
+      "lines": 109,
+      "imports": [
+        "androidx.compose.foundation.background",
+        "androidx.compose.foundation.border",
+        "androidx.compose.foundation.layout.*",
+        "androidx.compose.foundation.rememberScrollState",
+        "androidx.compose.foundation.shape.RoundedCornerShape",
+        "androidx.compose.foundation.verticalScroll",
+        "androidx.compose.material.icons.Icons",
+        "androidx.compose.material.icons.filled.LockOpen",
+        "androidx.compose.material.icons.filled.Schedule",
+        "androidx.compose.material3.*",
+        "androidx.compose.runtime.Composable",
+        "androidx.compose.ui.Alignment",
+        "androidx.compose.ui.Modifier",
+        "androidx.compose.ui.draw.clip",
+        "androidx.compose.ui.graphics.Color",
+        "androidx.compose.ui.graphics.vector.ImageVector",
+        "androidx.compose.ui.res.stringResource",
+        "androidx.compose.ui.text.font.FontWeight",
+        "androidx.compose.ui.text.style.TextAlign",
+        "androidx.compose.ui.tooling.preview.Preview",
+        "androidx.compose.ui.unit.dp",
+        "androidx.compose.ui.unit.sp",
+        "com.protas.enfocaapp.R",
+        "com.protas.enfocaapp.ui.theme.DopaminaSurfaceContainerHigh",
+        "com.protas.enfocaapp.ui.theme.DopaminaSurfaceContainerLow",
+        "com.protas.enfocaapp.ui.theme.EnfocaAPPTheme"
+      ],
+      "symbols": [
+        {
+          "name": "OnboardingInfoScreen",
+          "kind": "fun",
+          "line": 31
+        },
+        {
+          "name": "PreviewOnboardingStatsScreen",
+          "kind": "fun",
+          "line": 105,
+          "modifiers": [
+            "private"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app/src/main/java/com/protas/enfocaapp/ui/screens/onboarding/OnboardingRigorScreen.kt",
+      "language": "kotlin",
+      "lines": 193,
+      "imports": [
+        "androidx.annotation.StringRes",
+        "androidx.compose.animation.animateColorAsState",
+        "androidx.compose.animation.core.tween",
+        "androidx.compose.foundation.background",
+        "androidx.compose.foundation.border",
+        "androidx.compose.foundation.clickable",
+        "androidx.compose.foundation.layout.*",
+        "androidx.compose.foundation.rememberScrollState",
+        "androidx.compose.foundation.shape.RoundedCornerShape",
+        "androidx.compose.foundation.verticalScroll",
+        "androidx.compose.material3.*",
+        "androidx.compose.runtime.*",
+        "androidx.compose.ui.Alignment",
+        "androidx.compose.ui.Modifier",
+        "androidx.compose.ui.draw.clip",
+        "androidx.compose.ui.graphics.Color",
+        "androidx.compose.ui.res.stringResource",
+        "androidx.compose.ui.text.font.FontWeight",
+        "androidx.compose.ui.tooling.preview.Preview",
+        "androidx.compose.ui.unit.dp",
+        "androidx.compose.ui.unit.sp",
+        "com.protas.enfocaapp.R",
+        "com.protas.enfocaapp.ui.theme.DopaminaSurfaceContainerHigh",
+        "com.protas.enfocaapp.ui.theme.EnfocaAPPTheme"
+      ],
+      "symbols": [
+        {
+          "name": "NivelRigor",
+          "kind": "class",
+          "line": 28,
+          "modifiers": [
+            "enum"
+          ]
+        },
+        {
+          "name": "RigorOption",
+          "kind": "class",
+          "line": 31,
+          "modifiers": [
+            "data"
+          ]
+        },
+        {
+          "name": "OnboardingRigorScreen",
+          "kind": "fun",
+          "line": 52
+        },
+        {
+          "name": "RigorCard",
+          "kind": "fun",
+          "line": 140,
+          "modifiers": [
+            "private"
+          ]
+        },
+        {
+          "name": "PreviewOnboardingRigorScreen",
+          "kind": "fun",
+          "line": 189,
+          "modifiers": [
+            "private"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app/src/main/java/com/protas/enfocaapp/ui/screens/onboarding/OnboardingStatsScreen.kt",
+      "language": "kotlin",
+      "lines": 186,
+      "imports": [
+        "androidx.compose.foundation.background",
+        "androidx.compose.foundation.border",
+        "androidx.compose.foundation.layout.*",
+        "androidx.compose.foundation.rememberScrollState",
+        "androidx.compose.foundation.shape.RoundedCornerShape",
+        "androidx.compose.foundation.verticalScroll",
+        "androidx.compose.material.icons.Icons",
+        "androidx.compose.material.icons.filled.LockOpen",
+        "androidx.compose.material.icons.filled.Schedule",
+        "androidx.compose.material3.*",
+        "androidx.compose.runtime.Composable",
+        "androidx.compose.ui.Alignment",
+        "androidx.compose.ui.Modifier",
+        "androidx.compose.ui.draw.clip",
+        "androidx.compose.ui.graphics.Color",
+        "androidx.compose.ui.graphics.vector.ImageVector",
+        "androidx.compose.ui.res.stringResource",
+        "androidx.compose.ui.text.font.FontWeight",
+        "androidx.compose.ui.text.style.TextAlign",
+        "androidx.compose.ui.tooling.preview.Preview",
+        "androidx.compose.ui.unit.dp",
+        "androidx.compose.ui.unit.sp",
+        "com.protas.enfocaapp.R",
+        "com.protas.enfocaapp.ui.theme.DopaminaSurfaceContainerHigh",
+        "com.protas.enfocaapp.ui.theme.DopaminaSurfaceContainerLow",
+        "com.protas.enfocaapp.ui.theme.EnfocaAPPTheme"
+      ],
+      "symbols": [
+        {
+          "name": "OnboardingStatsScreen",
+          "kind": "fun",
+          "line": 31
+        },
+        {
+          "name": "StatCard",
+          "kind": "fun",
+          "line": 121,
+          "modifiers": [
+            "private"
+          ]
+        },
+        {
+          "name": "PreviewOnboardingStatsScreen",
+          "kind": "fun",
+          "line": 182,
+          "modifiers": [
+            "private"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app/src/main/java/com/protas/enfocaapp/ui/screens/onboarding/OnboardingWelcomeScreen.kt",
+      "language": "kotlin",
+      "lines": 273,
+      "imports": [
+        "androidx.compose.animation.core.*",
+        "androidx.compose.foundation.background",
+        "androidx.compose.foundation.border",
+        "androidx.compose.foundation.layout.*",
+        "androidx.compose.foundation.rememberScrollState",
+        "androidx.compose.foundation.shape.CircleShape",
+        "androidx.compose.foundation.shape.RoundedCornerShape",
+        "androidx.compose.foundation.verticalScroll",
+        "androidx.compose.material.icons.Icons",
+        "androidx.compose.material.icons.automirrored.filled.ArrowForward",
+        "androidx.compose.material3.*",
+        "androidx.compose.runtime.*",
+        "androidx.compose.ui.Alignment",
+        "androidx.compose.ui.Modifier",
+        "androidx.compose.ui.draw.alpha",
+        "androidx.compose.ui.draw.clip",
+        "androidx.compose.ui.draw.scale",
+        "androidx.compose.ui.graphics.Brush",
+        "androidx.compose.ui.graphics.Color",
+        "androidx.compose.ui.res.stringResource",
+        "androidx.compose.ui.text.font.FontWeight",
+        "androidx.compose.ui.text.style.TextAlign",
+        "androidx.compose.ui.tooling.preview.Preview",
+        "androidx.compose.ui.unit.dp",
+        "androidx.compose.ui.unit.sp",
+        "com.protas.enfocaapp.R",
+        "com.protas.enfocaapp.ui.theme.EnfocaAPPTheme"
+      ],
+      "symbols": [
+        {
+          "name": "OnboardingWelcomeScreen",
+          "kind": "fun",
+          "line": 33
+        },
+        {
+          "name": "BiometricVisualizer",
+          "kind": "fun",
+          "line": 128,
+          "modifiers": [
+            "private"
+          ]
+        },
+        {
+          "name": "PulsingRing",
+          "kind": "fun",
+          "line": 183,
+          "modifiers": [
+            "private"
+          ]
+        },
+        {
+          "name": "ScanningOverlay",
+          "kind": "fun",
+          "line": 229,
+          "modifiers": [
+            "private"
+          ]
+        },
+        {
+          "name": "PreviewOnboardingWelcomeScreen",
+          "kind": "fun",
+          "line": 269,
+          "modifiers": [
+            "private"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app/src/main/java/com/protas/enfocaapp/ui/screens/onboarding/navegationonboarding.kt",
+      "language": "kotlin",
+      "lines": 66,
+      "imports": [
+        "androidx.compose.foundation.layout.fillMaxSize",
+        "androidx.compose.foundation.pager.HorizontalPager",
+        "androidx.compose.foundation.pager.rememberPagerState",
+        "androidx.compose.runtime.Composable",
+        "androidx.compose.runtime.rememberCoroutineScope",
+        "androidx.compose.ui.Modifier",
+        "kotlinx.coroutines.launch"
+      ],
+      "symbols": [
+        {
+          "name": "OnboardingPagerScreen",
+          "kind": "fun",
+          "line": 12
+        }
+      ]
+    },
+    {
+      "path": "app/src/main/java/com/protas/enfocaapp/ui/theme/Color.kt",
+      "language": "kotlin",
+      "lines": 23,
+      "imports": [
+        "androidx.compose.ui.graphics.Color"
+      ],
+      "symbols": []
+    },
+    {
+      "path": "app/src/main/java/com/protas/enfocaapp/ui/theme/Theme.kt",
+      "language": "kotlin",
+      "lines": 62,
+      "imports": [
+        "android.app.Activity",
+        "android.os.Build",
+        "androidx.compose.foundation.isSystemInDarkTheme",
+        "androidx.compose.material3.MaterialTheme",
+        "androidx.compose.material3.darkColorScheme",
+        "androidx.compose.material3.dynamicDarkColorScheme",
+        "androidx.compose.material3.dynamicLightColorScheme",
+        "androidx.compose.material3.lightColorScheme",
+        "androidx.compose.runtime.Composable",
+        "androidx.compose.ui.platform.LocalContext"
+      ],
+      "symbols": [
+        {
+          "name": "EnfocaAPPTheme",
+          "kind": "fun",
+          "line": 42
+        }
+      ]
+    },
+    {
+      "path": "app/src/main/java/com/protas/enfocaapp/ui/theme/Type.kt",
+      "language": "kotlin",
+      "lines": 34,
+      "imports": [
+        "androidx.compose.material3.Typography",
+        "androidx.compose.ui.text.TextStyle",
+        "androidx.compose.ui.text.font.FontFamily",
+        "androidx.compose.ui.text.font.FontWeight",
+        "androidx.compose.ui.unit.sp"
+      ],
+      "symbols": []
+    },
+    {
+      "path": "app/src/test/java/com/protas/enfocaapp/ExampleUnitTest.kt",
+      "language": "kotlin",
+      "lines": 17,
+      "imports": [
+        "org.junit.Test",
+        "org.junit.Assert.*"
+      ],
+      "symbols": [
+        {
+          "name": "ExampleUnitTest",
+          "kind": "class",
+          "line": 12
+        },
+        {
+          "name": "addition_isCorrect",
+          "kind": "fun",
+          "line": 14,
+          "container": "ExampleUnitTest"
+        }
+      ]
+    }
+  ]
+}
