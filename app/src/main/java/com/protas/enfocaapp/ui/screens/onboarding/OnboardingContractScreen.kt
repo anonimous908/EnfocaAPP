@@ -30,6 +30,9 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
@@ -49,6 +52,9 @@ fun OnboardingContractScreen(
     onAtras: () -> Unit = {}
 ) {
     var firmado by remember { mutableStateOf(false) }
+    var termsAccepted by remember { mutableStateOf(false) }
+    var showPrivacyPolicy by remember { mutableStateOf(false) }
+    var showTermsOfService by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -67,15 +73,6 @@ fun OnboardingContractScreen(
                     .padding(top = 24.dp, bottom = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.Gavel,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(48.dp)
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
                 Text(
                     text = stringResource(id = R.string.onboarding_contract_title),
                     fontSize = 26.sp,
@@ -94,12 +91,58 @@ fun OnboardingContractScreen(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                ContratoCard()
+                // Checkbox y textos legales
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(
+                        checked = termsAccepted,
+                        onCheckedChange = { termsAccepted = it },
+                        colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colorScheme.primary)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    
+                    val primaryColor = MaterialTheme.colorScheme.primary
+                    val textColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    val annotatedText = buildAnnotatedString {
+                        withStyle(SpanStyle(color = textColor)) {
+                            append("Al marcar esta casilla, acepto formalmente la ")
+                        }
+                        pushStringAnnotation(tag = "privacy", annotation = "privacy")
+                        withStyle(SpanStyle(color = primaryColor, fontWeight = FontWeight.Bold)) {
+                            append("Política de Privacidad")
+                        }
+                        pop()
+                        withStyle(SpanStyle(color = textColor)) {
+                            append(" y los ")
+                        }
+                        pushStringAnnotation(tag = "terms", annotation = "terms")
+                        withStyle(SpanStyle(color = primaryColor, fontWeight = FontWeight.Bold)) {
+                            append("Términos de Servicio")
+                        }
+                        pop()
+                        withStyle(SpanStyle(color = textColor)) {
+                            append(".")
+                        }
+                    }
+                    ClickableText(
+                        text = annotatedText,
+                        style = TextStyle(fontSize = 13.sp, lineHeight = 18.sp),
+                        onClick = { offset ->
+                            annotatedText.getStringAnnotations(tag = "privacy", start = offset, end = offset)
+                                .firstOrNull()?.let { showPrivacyPolicy = true }
+                            annotatedText.getStringAnnotations(tag = "terms", start = offset, end = offset)
+                                .firstOrNull()?.let { showTermsOfService = true }
+                        }
+                    )
+                }
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 FirmaButton(
                     firmado = firmado,
+                    enabled = termsAccepted,
                     onFirmado = { firmado = true }
                 )
 
@@ -150,6 +193,22 @@ fun OnboardingContractScreen(
                 Spacer(modifier = Modifier.height(24.dp))
             }
         }
+
+        if (showPrivacyPolicy) {
+            LegalDialog(
+                title = "Política de Privacidad",
+                text = "Dopamina Guard se compromete solemnemente a proteger su privacidad con el más alto rigor. Toda la información recopilada, incluyendo sus estadísticas de uso y patrones de comportamiento digital, se procesa de forma estrictamente local en su dispositivo.\n\nBajo ninguna circunstancia compartiremos, venderemos, rentaremos ni transferiremos sus datos a terceros. Los permisos de accesibilidad, uso de datos y superposición de pantalla son empleados única y exclusivamente para habilitar las funcionalidades de bloqueo e intervención de esta herramienta.\n\nAl otorgar estos permisos, usted comprende que son necesarios para el correcto funcionamiento del ecosistema de restricciones de la aplicación.",
+                onDismiss = { showPrivacyPolicy = false }
+            )
+        }
+
+        if (showTermsOfService) {
+            LegalDialog(
+                title = "Términos de Servicio",
+                text = "Al utilizar Dopamina Guard, usted acepta someterse a todas las restricciones y límites establecidos de manera voluntaria dentro de la aplicación. Esta es una herramienta de grado estricto diseñada para potenciar su productividad y restablecer su bienestar digital.\n\nEl usuario asume absoluta y total responsabilidad sobre las configuraciones de rigor elegidas y los bloqueos aplicados a sus propias aplicaciones y dispositivo. El equipo desarrollador declina toda responsabilidad por cualquier inconveniente, pérdida de información, o estado de incomunicación temporal que derive de las restricciones que el usuario haya configurado.\n\nAl aceptar estos términos, usted reconoce que Dopamina Guard actuará sin concesiones de acuerdo a los límites impuestos.",
+                onDismiss = { showTermsOfService = false }
+            )
+        }
     }
 }
 
@@ -182,111 +241,11 @@ private fun ContratoHeader(onAtras: () -> Unit) {
     }
 }
 
-@Composable
-private fun ContratoCard() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
-            .background(DopaminaSurfaceContainerLow)
-            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp))
-            .padding(16.dp)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(bottom = 12.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.Description,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(20.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = stringResource(id = R.string.onboarding_contract_privacy),
-                fontSize = 12.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                letterSpacing = 0.1.sp
-            )
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(1.dp)
-                .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = buildAnnotatedString {
-                append(stringResource(id = R.string.onboarding_contract_text_1))
-                withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)) {
-                    append(stringResource(id = R.string.onboarding_contract_text_2))
-                }
-                append(stringResource(id = R.string.onboarding_contract_text_3))
-            },
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.onSurface,
-            lineHeight = 24.sp
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        val puntos = listOf(
-            stringResource(id = R.string.onboarding_contract_point1_title) to stringResource(id = R.string.onboarding_contract_point1_desc),
-
-            stringResource(id = R.string.onboarding_contract_point2_title) to stringResource(id = R.string.onboarding_contract_point2_desc),
-            stringResource(id = R.string.onboarding_contract_point3_title) to stringResource(id = R.string.onboarding_contract_point3_desc)
-        )
-
-        puntos.forEach { (titulo, desc) ->
-            Row(modifier = Modifier.padding(bottom = 8.dp)) {
-                Text("• ", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 16.sp)
-                Text(
-                    text = buildAnnotatedString {
-                        withStyle(SpanStyle(fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)) {
-                            append("$titulo: ")
-                        }
-                        withStyle(SpanStyle(color = MaterialTheme.colorScheme.onSurfaceVariant)) {
-                            append(desc)
-                        }
-                    },
-                    fontSize = 16.sp,
-                    lineHeight = 24.sp
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(
-                    width = 2.dp,
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(topStart = 0.dp, bottomStart = 0.dp)
-                )
-                .padding(start = 12.dp)
-        ) {
-            Text(
-                text = stringResource(id = R.string.onboarding_contract_quote),
-                fontSize = 16.sp,
-                fontStyle = FontStyle.Italic,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                lineHeight = 24.sp
-            )
-        }
-    }
-}
 
 @Composable
 private fun FirmaButton(
     firmado: Boolean,
+    enabled: Boolean = true,
     onFirmado: () -> Unit
 ) {
     // Usamos Animatable para una gestión de hilos y frames nativa y eficiente
@@ -325,8 +284,8 @@ private fun FirmaButton(
             .clip(CircleShape)
             .background(MaterialTheme.colorScheme.background)
             .border(2.dp, borderColor, CircleShape)
-            .pointerInput(firmado) {
-                if (!firmado) {
+            .pointerInput(firmado, enabled) {
+                if (!firmado && enabled) {
                     detectTapGestures(
                         onPress = {
                             presionando = true
@@ -387,4 +346,33 @@ private fun PreviewOnboardingContractScreen() {
     EnfocaAPPTheme {
         OnboardingContractScreen()
     }
+}
+
+@Composable
+private fun LegalDialog(title: String, text: String, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(text = title, fontWeight = FontWeight.Bold, fontSize = 20.sp, color = MaterialTheme.colorScheme.onSurface)
+        },
+        text = {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                Text(
+                    text = text,
+                    fontSize = 14.sp,
+                    lineHeight = 22.sp,
+                    textAlign = TextAlign.Justify,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("ENTENDIDO", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+            }
+        },
+        containerColor = DopaminaSurfaceContainerLow,
+        titleContentColor = MaterialTheme.colorScheme.onSurface,
+        textContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+    )
 }

@@ -1,0 +1,376 @@
+package com.protas.enfocaapp.ui.screens.onboarding
+
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowForward
+import androidx.compose.material.icons.outlined.BarChart
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.draw.*
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.*
+import kotlin.math.roundToInt
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UsageEstimationScreen(onPermissionGranted: (Int) -> Unit = {}) {
+    var sliderValue by remember { mutableFloatStateOf(4f) }
+    val hours = sliderValue.roundToInt()
+
+    // ── BottomSheet state ──────────────────────────────────────────────────
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showSheet by remember { mutableStateOf(false) }
+
+    var triggerScale by remember { mutableStateOf(false) }
+    val scale by animateFloatAsState(
+        targetValue = if (triggerScale) 1.12f else 1f,
+        animationSpec = spring(stiffness = Spring.StiffnessHigh),
+        finishedListener = { triggerScale = false },
+        label = "numberScale"
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFF131313))
+    ) {
+        // Ambient glow
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .offset(y = (-60).dp)
+                .size(300.dp)
+                .background(
+                    Brush.radialGradient(
+                        listOf(Color(0xFF0052FF).copy(alpha = 0.03f), Color.Transparent)
+                    ),
+                    CircleShape
+                )
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp)
+                .padding(top = 64.dp, bottom = 48.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Seamos honestos...",
+                style = MaterialTheme.typography.displaySmall.copy(
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = (-0.02).em,
+                    lineHeight = 38.sp
+                ),
+                color = Color(0xFFE5E2E1),
+                textAlign = TextAlign.Center
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = "¿Cuánto tiempo crees que usas tu celular al día?",
+                style = MaterialTheme.typography.bodyLarge,
+                color = Color(0xFFC3C5D9),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+
+            Spacer(Modifier.weight(1f))
+
+            // Card
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Color(0xFF1C1B1B))
+                    .border(1.dp, Color(0xFF353534), RoundedCornerShape(12.dp))
+                    .padding(32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(32.dp)
+            ) {
+                Row(verticalAlignment = Alignment.Bottom) {
+                    Text(
+                        text = "$hours",
+                        style = TextStyle(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 64.sp,
+                            lineHeight = 64.sp
+                        ),
+                        color = Color(0xFFE5E2E1),
+                        modifier = Modifier.graphicsLayer { scaleX = scale; scaleY = scale }
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        text = "h",
+                        style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.SemiBold),
+                        color = Color(0xFF0052FF),
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                }
+
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    GradientSlider(
+                        value = sliderValue,
+                        onValueChange = { sliderValue = it; triggerScale = true },
+                        valueRange = 1f..12f,
+                        steps = 10
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text("1h", style = MaterialTheme.typography.labelSmall, color = Color(0xFFC3C5D9))
+                        Text("12h", style = MaterialTheme.typography.labelSmall, color = Color(0xFFC3C5D9))
+                    }
+                }
+
+                val (feedbackText, feedbackColor) = remember(hours) {
+                    when {
+                        hours <= 2  -> "Nivel: Monje Tibetano"       to Color(0xFFC6C6C7)
+                        hours <= 5  -> "Nivel: Promedio Habitual"    to Color(0xFF8D90A2)
+                        hours <= 8  -> "Nivel: Usuario Intensivo"    to Color(0xFFFFB4AB)
+                        else        -> "Nivel: Conectado a la Matrix" to Color(0xFFFF6B6B)
+                    }
+                }
+                AnimatedContent(
+                    targetState = feedbackText,
+                    transitionSpec = { fadeIn(tween(200)) togetherWith fadeOut(tween(200)) },
+                    label = "feedbackAnim"
+                ) { text ->
+                    Text(
+                        text = text,
+                        style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.05.em),
+                        color = feedbackColor
+                    )
+                }
+            }
+
+            Spacer(Modifier.weight(1f))
+
+            // ── CTA → abre el BottomSheet ──────────────────────────────────
+            Button(
+                onClick = { showSheet = true },   // <-- aquí se abre
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF0052FF),
+                    contentColor = Color(0xFFDFE3FF)
+                )
+            ) {
+                Text(
+                    text = "confirmar",
+                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+                )
+                Spacer(Modifier.width(8.dp))
+                Icon(Icons.AutoMirrored.Outlined.ArrowForward, null, modifier = Modifier.size(20.dp))
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            Text(
+                text = "Compararemos esto con tus datos reales más adelante.",
+                style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.05.em),
+                color = Color(0xFFC3C5D9).copy(alpha = 0.7f),
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+
+    // ── ModalBottomSheet ────────────────────────────────────────────────────
+    if (showSheet) {
+        RealityAnalysisSheet(
+            sheetState = sheetState,
+            onDismiss = { showSheet = false },
+            onConfirm = {
+                showSheet = false
+                onPermissionGranted(hours)
+            }
+        )
+    }
+}
+
+// TODO: Estos son componentes de reemplazo temporal porque no estaban en el snippet.
+@Composable
+fun GradientSlider(
+    value: Float,
+    onValueChange: (Float) -> Unit,
+    valueRange: ClosedFloatingPointRange<Float>,
+    steps: Int
+) {
+    Slider(
+        value = value,
+        onValueChange = onValueChange,
+        valueRange = valueRange,
+        steps = steps,
+        colors = SliderDefaults.colors(
+            thumbColor = Color(0xFF0052FF),
+            activeTrackColor = Color(0xFF0052FF)
+        )
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun RealityAnalysisSheet(
+    sheetState: SheetState,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    // Pulsing glow animation para el ícono
+    val infiniteTransition = rememberInfiniteTransition(label = "pulse")
+    val pulseAlpha by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 0.25f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1500, easing = EaseInOut),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "pulseAlpha"
+    )
+    val pulseRadius by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 24f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(3000, easing = EaseOut),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "pulseRadius"
+    )
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        containerColor = Color(0xFF1C1B1B),
+        dragHandle = {
+            // Handle personalizado
+            Box(
+                modifier = Modifier
+                    .padding(top = 12.dp)
+                    .width(48.dp)
+                    .height(4.dp)
+                    .clip(CircleShape)
+                    .background(Color(0xFF434656).copy(alpha = 0.5f))
+            )
+        },
+        tonalElevation = 0.dp
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+                .padding(top = 16.dp, bottom = 48.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(Modifier.height(16.dp))
+
+            // ── Ícono con pulse ────────────────────────────────────────────
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.size(64.dp)
+            ) {
+                // Anillo de pulso externo
+                Box(
+                    modifier = Modifier
+                        .size((64 + pulseRadius).dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFF0052FF).copy(alpha = pulseAlpha * 0.4f))
+                )
+                // Círculo base del ícono
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .size(64.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFF2A2A2A))
+                        .border(1.dp, Color(0xFF353534), CircleShape)
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.BarChart,
+                        contentDescription = null,
+                        tint = Color(0xFFB7C4FF),
+                        modifier = Modifier.size(28.dp)
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(24.dp))
+
+            // ── Copy ──────────────────────────────────────────────────────
+            Text(
+                text = "Análisis de Realidad",
+                style = MaterialTheme.typography.headlineSmall.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    letterSpacing = (-0.01).em
+                ),
+                color = Color(0xFFE5E2E1),
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            Text(
+                text = "Para ver qué tan cerca estuviste de la realidad, " +
+                       "necesitamos que nos permitas ver tu tiempo de pantalla.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color(0xFFC3C5D9),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            Text(
+                text = "(Tranquilo, todo se queda en tu dispositivo)",
+                style = MaterialTheme.typography.bodySmall,
+                color = Color(0xFF8D90A2),
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(Modifier.height(32.dp))
+
+            // ── Botón primario ─────────────────────────────────────────────
+            Button(
+                onClick = onConfirm,
+                modifier = Modifier.fillMaxWidth().height(48.dp),
+                shape = RoundedCornerShape(4.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF0052FF),
+                    contentColor = Color(0xFFDFE3FF)
+                )
+            ) {
+                Text(
+                    text = "DESCUBRIR LA VERDAD",
+                    style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.05.em)
+                )
+            }
+
+            Spacer(Modifier.height(8.dp))
+
+            // ── Botón secundario ───────────────────────────────────────────
+            OutlinedButton(
+                onClick = onDismiss,
+                modifier = Modifier.fillMaxWidth().height(48.dp),
+                shape = RoundedCornerShape(4.dp),
+                border = BorderStroke(1.dp, Color(0xFF353534)),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    containerColor = Color(0xFF201F1F),
+                    contentColor = Color(0xFFC3C5D9)
+                )
+            ) {
+                Text(
+                    text = "OMITIR",
+                    style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.05.em)
+                )
+            }
+        }
+    }
+}

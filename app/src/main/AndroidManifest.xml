@@ -2,6 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" >
 
+    <!-- Permiso para Superposición de pantalla (mostrar bloqueos sobre otras apps) -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <!-- Permiso de notificaciones (enviar alertas y recordatorios) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Análisis de datos (acceder a las estadísticas de uso para saber cuánto tiempo pasas en cada app) -->
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
+
+    <!-- Ignorar Optimización de Batería (evita que el sistema cierre la app en segundo plano) -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
     <application
         android:name=".EnfocaApplication"
         android:allowBackup="false"

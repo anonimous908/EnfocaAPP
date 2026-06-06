@@ -25,6 +25,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
 import com.protas.enfocaapp.R
 import com.protas.enfocaapp.ui.theme.EnfocaAPPTheme
 
@@ -163,16 +165,10 @@ private fun BiometricVisualizer() {
             // Línea de escaneo animada sobre el ícono
             ScanningOverlay()
 
-            // Ícono de huella (usa tu propio drawable o material icon)
-            // Si tienes material-icons-extended en el proyecto:
-            // Icon(Icons.Outlined.Fingerprint, ...)
-            // Si no, reemplaza con un Icon de tu drawable:
-            Text(
-                text = "fingerprint",        // placeholder — reemplaza con Icon real
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
-                fontSize = 48.sp
-                // En producción usa:
-                // Icon(painter = painterResource(R.drawable.ic_fingerprint), ...)
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "Logo",
+                modifier = Modifier.size(64.dp)
             )
         }
     }

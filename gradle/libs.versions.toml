@@ -13,7 +13,6 @@ navigation = "2.7.7"
 datastore = "1.0.0"
 lifecycleViewModel = "2.6.1"
 securityCrypto = "1.1.0-alpha06"
-tink = "1.8.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -44,7 +43,6 @@ androidx-security-crypto = { group = "androidx.security", name = "security-crypt
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version = "2.2.10-2.0.2" }
 
