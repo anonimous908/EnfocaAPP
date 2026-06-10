@@ -4,7 +4,11 @@ import android.app.AppOpsManager
 import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Context
+import android.os.Build
+import android.os.PowerManager
 import android.os.Process
+import android.provider.Settings
+import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Calendar
 import javax.inject.Inject
@@ -81,5 +85,33 @@ class AppUsageRepository @Inject constructor(
         val displayUnlocks = if (unlocks == 0) 1 else unlocks
 
         return Pair(displayHours, displayUnlocks)
+    }
+
+    /**
+     * Verifica si el permiso SYSTEM_ALERT_WINDOW está concedido.
+     */
+    fun hasOverlayPermission(): Boolean {
+        return Settings.canDrawOverlays(context)
+    }
+
+    /**
+     * Verifica si el permiso de notificaciones está concedido.
+     * En API 33+ se consulta NotificationManagerCompat; en versiones
+     * anteriores el permiso se otorga automáticamente en el manifest.
+     */
+    fun hasNotificationPermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            NotificationManagerCompat.from(context).areNotificationsEnabled()
+        } else {
+            true
+        }
+    }
+
+    /**
+     * Verifica si la app está excluida de optimizaciones de batería.
+     */
+    fun hasBatteryOptimizationPermission(): Boolean {
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as? PowerManager
+        return powerManager?.isIgnoringBatteryOptimizations(context.packageName) ?: false
     }
 }
