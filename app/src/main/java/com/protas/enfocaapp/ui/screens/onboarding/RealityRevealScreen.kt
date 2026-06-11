@@ -36,7 +36,7 @@ fun RealityRevealScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF131313))
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Column(
             modifier = Modifier
@@ -60,23 +60,23 @@ fun RealityRevealScreen(
                         letterSpacing = (-0.02).em,
                         lineHeight = 38.sp
                     ),
-                    color = Color(0xFFC3C5D9).copy(alpha = 0.6f)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
                     text = buildAnnotatedString {
                         withStyle(
                             SpanStyle(
-                                color = Color(0xFFE5E2E1),
+                                color = MaterialTheme.colorScheme.onBackground,
                                 fontWeight = FontWeight.Medium
                             )
                         ) { append("pero pasas ") }
-                        withStyle(SpanStyle(color = Color(0xFF0052FF))) {
+                        withStyle(SpanStyle(color = MaterialTheme.colorScheme.primaryContainer)) {
                             append("${realHours}h")
                         }
                         withStyle(
                             SpanStyle(
-                                color = Color(0xFFE5E2E1),
+                                color = MaterialTheme.colorScheme.onBackground,
                                 fontWeight = FontWeight.Medium
                             )
                         ) { append(" diarias.") }
@@ -114,8 +114,8 @@ fun RealityRevealScreen(
                     modifier = Modifier.fillMaxWidth().height(60.dp),
                     shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFE5E2E1),
-                        contentColor = Color(0xFF131313)
+                        containerColor = MaterialTheme.colorScheme.onBackground,
+                        contentColor = MaterialTheme.colorScheme.background
                     ),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                 ) {
@@ -131,7 +131,7 @@ fun RealityRevealScreen(
                         letterSpacing = 0.05.em,
                         fontWeight = FontWeight.Light
                     ),
-                    color = Color(0xFFC3C5D9).copy(alpha = 0.6f)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                 )
             }
         }
@@ -144,23 +144,23 @@ fun RealityRevealScreen(
 private fun TimeCard(hours: Int) {
     // Bar heights as fractions (decorative mini-chart)
     val barFractions = listOf(0.25f, 0.50f, 0.33f, 0.75f, 1.00f)
-    val activeColor  = Color(0xFF0052FF)
-    val inactiveColor = Color(0xFFC3C5D9).copy(alpha = 0.2f)
+    val activeColor  = MaterialTheme.colorScheme.primaryContainer
+    val inactiveColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f)
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(192.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFF2A2A2A).copy(alpha = 0.4f))
-            .border(1.dp, Color.White.copy(alpha = 0.05f), RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.4f))
+            .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.08f), RoundedCornerShape(16.dp))
             .padding(16.dp)
     ) {
         // Label
         Text(
             text = "TIEMPO DE USO",
             style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.1.em),
-            color = Color(0xFFC3C5D9),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.align(Alignment.TopStart)
         )
 
@@ -177,13 +177,13 @@ private fun TimeCard(hours: Int) {
                     lineHeight = 56.sp,
                     letterSpacing = (-0.03).em
                 ),
-                color = Color(0xFFE5E2E1)
+                color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(Modifier.width(8.dp))
             Text(
                 text = "hoy",
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Light),
-                color = Color(0xFFC3C5D9),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
         }
@@ -227,8 +227,8 @@ private fun UnlocksCard(count: Int, deltaPercent: Int) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFF2A2A2A).copy(alpha = 0.4f))
-            .border(1.dp, Color.White.copy(alpha = 0.05f), RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.4f))
+            .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.08f), RoundedCornerShape(16.dp))
             .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Bottom
@@ -237,7 +237,7 @@ private fun UnlocksCard(count: Int, deltaPercent: Int) {
             Text(
                 text = "DESBLOQUEOS",
                 style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.1.em),
-                color = Color(0xFFC3C5D9)
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
                 text = "$count",
@@ -247,7 +247,7 @@ private fun UnlocksCard(count: Int, deltaPercent: Int) {
                     lineHeight = 32.sp,
                     letterSpacing = (-0.02).em
                 ),
-                color = Color(0xFFE5E2E1)
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
 
@@ -255,14 +255,14 @@ private fun UnlocksCard(count: Int, deltaPercent: Int) {
         Box(
             modifier = Modifier
                 .clip(CircleShape)
-                .background(Color(0xFF0052FF).copy(alpha = 0.1f))
-                .border(1.dp, Color(0xFF0052FF).copy(alpha = 0.2f), CircleShape)
+                .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f))
+                .border(1.dp, MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f), CircleShape)
                 .padding(horizontal = 12.dp, vertical = 6.dp)
         ) {
             Text(
                 text = "↑ $deltaPercent%",
                 style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.05.em),
-                color = Color(0xFF0052FF)
+                color = MaterialTheme.colorScheme.primaryContainer
             )
         }
     }

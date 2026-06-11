@@ -39,8 +39,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.protas.enfocaapp.ui.theme.DopaminaSurfaceContainerHighest
-import com.protas.enfocaapp.ui.theme.DopaminaSurfaceContainerLow
 import com.protas.enfocaapp.ui.theme.EnfocaAPPTheme
 import kotlinx.coroutines.delay
 import androidx.compose.ui.res.stringResource
@@ -149,7 +147,7 @@ fun OnboardingContractScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 val btnColor by animateColorAsState(
-                    targetValue = if (firmado) MaterialTheme.colorScheme.primaryContainer else DopaminaSurfaceContainerHighest,
+                    targetValue = if (firmado) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHighest,
                     animationSpec = tween(300),
                     label = "btnColor"
                 )
@@ -169,7 +167,7 @@ fun OnboardingContractScreen(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = btnColor,
                         contentColor = btnTextColor,
-                        disabledContainerColor = DopaminaSurfaceContainerHighest,
+                        disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
                         disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 ) {
@@ -197,7 +195,7 @@ fun OnboardingContractScreen(
         if (showPrivacyPolicy) {
             LegalDialog(
                 title = "Política de Privacidad",
-                text = "Dopamina Guard se compromete solemnemente a proteger su privacidad con el más alto rigor. Toda la información recopilada, incluyendo sus estadísticas de uso y patrones de comportamiento digital, se procesa de forma estrictamente local en su dispositivo.\n\nBajo ninguna circunstancia compartiremos, venderemos, rentaremos ni transferiremos sus datos a terceros. Los permisos de accesibilidad, uso de datos y superposición de pantalla son empleados única y exclusivamente para habilitar las funcionalidades de bloqueo e intervención de esta herramienta.\n\nAl otorgar estos permisos, usted comprende que son necesarios para el correcto funcionamiento del ecosistema de restricciones de la aplicación.",
+                text = "EnfocaApp se compromete solemnemente a proteger su privacidad con el más alto rigor. Toda la información recopilada, incluyendo sus estadísticas de uso y patrones de comportamiento digital, se procesa de forma estrictamente local en su dispositivo.\n\nBajo ninguna circunstancia compartiremos, venderemos, rentaremos ni transferiremos sus datos a terceros. Los permisos de accesibilidad, uso de datos y superposición de pantalla son empleados única y exclusivamente para habilitar las funcionalidades de bloqueo e intervención de esta herramienta.\n\nAl otorgar estos permisos, usted comprende que son necesarios para el correcto funcionamiento del ecosistema de restricciones de la aplicación.",
                 onDismiss = { showPrivacyPolicy = false }
             )
         }
@@ -205,7 +203,7 @@ fun OnboardingContractScreen(
         if (showTermsOfService) {
             LegalDialog(
                 title = "Términos de Servicio",
-                text = "Al utilizar Dopamina Guard, usted acepta someterse a todas las restricciones y límites establecidos de manera voluntaria dentro de la aplicación. Esta es una herramienta de grado estricto diseñada para potenciar su productividad y restablecer su bienestar digital.\n\nEl usuario asume absoluta y total responsabilidad sobre las configuraciones de rigor elegidas y los bloqueos aplicados a sus propias aplicaciones y dispositivo. El equipo desarrollador declina toda responsabilidad por cualquier inconveniente, pérdida de información, o estado de incomunicación temporal que derive de las restricciones que el usuario haya configurado.\n\nAl aceptar estos términos, usted reconoce que Dopamina Guard actuará sin concesiones de acuerdo a los límites impuestos.",
+                text = "Al utilizar EnfocaApp, usted acepta someterse a todas las restricciones y límites establecidos de manera voluntaria dentro de la aplicación. Esta es una herramienta de grado estricto diseñada para potenciar su productividad y restablecer su bienestar digital.\n\nEl usuario asume absoluta y total responsabilidad sobre las configuraciones de rigor elegidas y los bloqueos aplicados a sus propias aplicaciones y dispositivo. El equipo desarrollador declina toda responsabilidad por cualquier inconveniente, pérdida de información, o estado de incomunicación temporal que derive de las restricciones que el usuario haya configurado.\n\nAl aceptar estos términos, usted reconoce que EnfocaApp actuará sin concesiones de acuerdo a los límites impuestos.",
                 onDismiss = { showTermsOfService = false }
             )
         }
@@ -371,7 +369,7 @@ private fun LegalDialog(title: String, text: String, onDismiss: () -> Unit) {
                 Text("ENTENDIDO", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
             }
         },
-        containerColor = DopaminaSurfaceContainerLow,
+        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
         titleContentColor = MaterialTheme.colorScheme.onSurface,
         textContentColor = MaterialTheme.colorScheme.onSurfaceVariant
     )

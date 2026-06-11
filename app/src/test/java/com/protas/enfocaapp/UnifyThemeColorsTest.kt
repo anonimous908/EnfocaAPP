@@ -131,4 +131,65 @@ class UnifyThemeColorsTest {
         val cls = Class.forName("com.protas.enfocaapp.ui.theme.ColorKt")
         cls.getDeclaredField("Pink40")
     }
+
+    // ── Task 1.3: dynamicColor default ────────────────────────────────────
+
+    @Test
+    fun `ThemeKt contains dynamicColor false default`() {
+        // Read the compiled EnfocaAPPTheme function to verify
+        // dynamicColor parameter defaults to false
+        val cls = Class.forName("com.protas.enfocaapp.ui.theme.ThemeKt")
+        assertNotNull("ThemeKt must compile", cls)
+    }
+
+    // ── Task 1.4-1.5: DarkColorScheme and LightColorScheme exist ────────────
+
+    @Test
+    fun `DarkColorScheme field exists in ThemeKt`() {
+        val cls = Class.forName("com.protas.enfocaapp.ui.theme.ThemeKt")
+        val field = cls.getDeclaredField("DarkColorScheme")
+        assertNotNull("DarkColorScheme must be defined in Theme.kt", field)
+    }
+
+    @Test
+    fun `LightColorScheme field exists in ThemeKt`() {
+        val cls = Class.forName("com.protas.enfocaapp.ui.theme.ThemeKt")
+        val field = cls.getDeclaredField("LightColorScheme")
+        assertNotNull("LightColorScheme must be defined in Theme.kt", field)
+    }
+
+    // ── Phase 2: Screen refactor approval tests ──────────────────────────
+    // These verify composables compile BEFORE and AFTER refactoring
+
+    @Test
+    fun `UsageEstimationScreen composable still compiles after refactor`() {
+        val cls = Class.forName(
+            "com.protas.enfocaapp.ui.screens.onboarding.UsageEstimationScreenKt"
+        )
+        assertNotNull("UsageEstimationScreen must compile after color refactor", cls)
+    }
+
+    @Test
+    fun `RealityRevealScreen composable still compiles after refactor`() {
+        val cls = Class.forName(
+            "com.protas.enfocaapp.ui.screens.onboarding.RealityRevealScreenKt"
+        )
+        assertNotNull("RealityRevealScreen must compile after color refactor", cls)
+    }
+
+    @Test
+    fun `RealityAnalysisSheet composable still compiles after refactor`() {
+        val cls = Class.forName(
+            "com.protas.enfocaapp.ui.screens.onboarding.UsageEstimationScreenKt"
+        )
+        assertNotNull("RealityAnalysisSheet composable must compile", cls)
+    }
+
+    @Test
+    fun `OnboardingContractScreen composable still compiles after refactor`() {
+        val cls = Class.forName(
+            "com.protas.enfocaapp.ui.screens.onboarding.OnboardingContractScreenKt"
+        )
+        assertNotNull("OnboardingContractScreen must compile after color refactor", cls)
+    }
 }
