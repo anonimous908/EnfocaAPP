@@ -13,13 +13,12 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
+import com.protas.enfocaapp.core.model.TodayUsageStats
 
 @Composable
 fun RealityRevealScreen(
     estimatedHours: Int = 3,
-    realHours: Int = 9,
-    unlocks: Int = 103,
-    unlocksDelta: Int = 42,
+    realUsageStats: TodayUsageStats = TodayUsageStats(0, 0),
     onContinue: () -> Unit = {}
 ) {
     // ── Staggered entry animations ─────────────────────────────────────────
@@ -72,7 +71,7 @@ fun RealityRevealScreen(
                             )
                         ) { append("pero pasas ") }
                         withStyle(SpanStyle(color = MaterialTheme.colorScheme.primaryContainer)) {
-                            append("${realHours}h")
+                            append(realUsageStats.formattedTime)
                         }
                         withStyle(
                             SpanStyle(
@@ -96,9 +95,9 @@ fun RealityRevealScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 // Time Card
-                TimeCard(hours = realHours)
+                TimeCard(hours = realUsageStats.hours, minutes = realUsageStats.minutes)
                 // Unlocks Card
-                UnlocksCard(count = unlocks, deltaPercent = unlocksDelta)
+                UnlocksCard(count = realUsageStats.unlockCount)
             }
 
             Spacer(Modifier.height(32.dp))
@@ -141,7 +140,7 @@ fun RealityRevealScreen(
 // ─── Time Card ─────────────────────────────────────────────────────────────────
 
 @Composable
-private fun TimeCard(hours: Int) {
+private fun TimeCard(hours: Int, minutes: Int) {
     // Bar heights as fractions (decorative mini-chart)
     val barFractions = listOf(0.25f, 0.50f, 0.33f, 0.75f, 1.00f)
     val activeColor  = MaterialTheme.colorScheme.primaryContainer
@@ -164,13 +163,13 @@ private fun TimeCard(hours: Int) {
             modifier = Modifier.align(Alignment.TopStart)
         )
 
-        // Big number
+        // Big number with minutes
         Row(
             modifier = Modifier.align(Alignment.BottomStart),
             verticalAlignment = Alignment.Bottom
         ) {
             Text(
-                text = "${hours}h",
+                text = "${hours}h ${minutes}m",
                 style = TextStyle(
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 56.sp,
@@ -222,7 +221,7 @@ private fun TimeCard(hours: Int) {
 // ─── Unlocks Card ──────────────────────────────────────────────────────────────
 
 @Composable
-private fun UnlocksCard(count: Int, deltaPercent: Int) {
+private fun UnlocksCard(count: Int) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -248,21 +247,6 @@ private fun UnlocksCard(count: Int, deltaPercent: Int) {
                     letterSpacing = (-0.02).em
                 ),
                 color = MaterialTheme.colorScheme.onBackground
-            )
-        }
-
-        // Delta badge
-        Box(
-            modifier = Modifier
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f))
-                .border(1.dp, MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f), CircleShape)
-                .padding(horizontal = 12.dp, vertical = 6.dp)
-        ) {
-            Text(
-                text = "↑ $deltaPercent%",
-                style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.05.em),
-                color = MaterialTheme.colorScheme.primaryContainer
             )
         }
     }
