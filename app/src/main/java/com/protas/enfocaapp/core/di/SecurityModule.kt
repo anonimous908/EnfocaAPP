@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import com.protas.enfocaapp.core.repository.RealUsageStatsDataSource
+import com.protas.enfocaapp.core.repository.UsageStatsDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,4 +41,11 @@ object SecurityModule {
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM // Cifra los valores
         )
     }
+
+    // 3. Bind de UsageStatsDataSource a su implementación real
+    @Provides
+    @Singleton
+    fun provideUsageStatsDataSource(
+        impl: RealUsageStatsDataSource
+    ): UsageStatsDataSource = impl
 }
