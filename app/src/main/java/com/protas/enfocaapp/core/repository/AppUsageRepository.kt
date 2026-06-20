@@ -5,9 +5,11 @@ import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.core.app.NotificationManagerCompat
+import com.protas.enfocaapp.core.model.AppUsageItem
 import com.protas.enfocaapp.core.model.TodayUsageStats
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Calendar
+import com.protas.enfocaapp.core.utils.hasUsageStatsPermission
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,7 +20,7 @@ class AppUsageRepository @Inject constructor(
 ) {
 
     fun hasUsageStatsPermission(): Boolean {
-        return usageStatsDataSource.hasUsageStatsPermission()
+        return context.hasUsageStatsPermission()
     }
 
     /**
@@ -29,7 +31,7 @@ class AppUsageRepository @Inject constructor(
      * No artificial inflation: 0 usage = "0h 0m", no minimum unlock count.
      */
     fun getTodayUsageStats(): TodayUsageStats {
-        if (!hasUsageStatsPermission()) return TodayUsageStats(0, 0)
+        if (!hasUsageStatsPermission()) return TodayUsageStats(0, 0, emptyList())
 
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, 0)
@@ -41,35 +43,42 @@ class AppUsageRepository @Inject constructor(
 
         val totalForegroundMs = usageStatsDataSource.queryTotalForegroundTimeMs(startTime, endTime)
         val unlocks = usageStatsDataSource.queryKeyguardHiddenCount(startTime, endTime)
+        val rawTopApps = usageStatsDataSource.queryTopApps(startTime, endTime, 10) // Extraemos 10 por si filtramos varias
+        val packageManager = context.packageManager
+        
+        val topApps = rawTopApps.mapNotNull { rawUsage ->
+            val packageName = rawUsage.packageName
+            try {
+                val appInfo = packageManager.getApplicationInfo(packageName, 0)
+                // Ignorar la propia app (EnfocaApp)
+                if (packageName == context.packageName) return@mapNotNull null
+                
+                val appName = packageManager.getApplicationLabel(appInfo).toString()
+                AppUsageItem(packageName, appName, rawUsage.timeMs)
+            } catch (e: Exception) {
+                null
+            }
+        }.take(3) // Nos quedamos solo con el Top 3 final
 
-        return TodayUsageStats(totalForegroundMs, unlocks)
+        return TodayUsageStats(totalForegroundMs, unlocks, topApps)
     }
 
     /**
-     * Verifica si el permiso SYSTEM_ALERT_WINDOW está concedido.
+     * Returns the foreground time in milliseconds for a specific app for today.
      */
-    fun hasOverlayPermission(): Boolean {
-        return Settings.canDrawOverlays(context)
+    fun getAppUsageToday(packageName: String): Long {
+        if (!hasUsageStatsPermission()) return 0L
+
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val startTime = calendar.timeInMillis
+        val endTime = System.currentTimeMillis()
+
+        return usageStatsDataSource.queryAppUsage(packageName, startTime, endTime)
     }
 
-    /**
-     * Verifica si el permiso de notificaciones está concedido.
-     * En API 33+ se consulta NotificationManagerCompat; en versiones
-     * anteriores el permiso se otorga automáticamente en el manifest.
-     */
-    fun hasNotificationPermission(): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            NotificationManagerCompat.from(context).areNotificationsEnabled()
-        } else {
-            true
-        }
-    }
 
-    /**
-     * Verifica si la app está excluida de optimizaciones de batería.
-     */
-    fun hasBatteryOptimizationPermission(): Boolean {
-        val powerManager = context.getSystemService(Context.POWER_SERVICE) as? PowerManager
-        return powerManager?.isIgnoringBatteryOptimizations(context.packageName) ?: false
-    }
 }

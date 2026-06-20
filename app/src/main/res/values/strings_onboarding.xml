@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- OnboardingContractScreen -->
+    <string name="onboarding_contract_terms_1">Al marcar esta casilla, acepto formalmente la </string>
+    <string name="onboarding_contract_privacy_policy">Política de Privacidad</string>
+    <string name="onboarding_contract_terms_2"> \y los </string>
+    <string name="onboarding_contract_terms_of_service">Términos de Servicio</string>
+    <string name="onboarding_contract_terms_3">.</string>
+    <string name="onboarding_contract_dialog_privacy_title">Política de Privacidad</string>
+    <string name="onboarding_contract_dialog_privacy_text">EnfocaApp se compromete solemnemente a proteger su privacidad con el más alto rigor. Toda la información recopilada, incluyendo sus estadísticas de uso y patrones de comportamiento digital, se procesa de forma estrictamente local en su dispositivo.\n\nBajo ninguna circunstancia compartiremos, venderemos, rentaremos ni transferiremos sus datos a terceros. Los permisos de accesibilidad, uso de datos y superposición de pantalla son empleados única y exclusivamente para habilitar las funcionalidades de bloqueo e intervención de esta herramienta.\n\nAl otorgar estos permisos, usted comprende que son necesarios para el correcto funcionamiento del ecosistema de restricciones de la aplicación.</string>
+    <string name="onboarding_contract_dialog_terms_title">Términos de Servicio</string>
+    <string name="onboarding_contract_dialog_terms_text">Al utilizar EnfocaApp, usted acepta someterse a todas las restricciones y límites establecidos de manera voluntaria dentro de la aplicación. Esta es una herramienta de grado estricto diseñada para potenciar su productividad y restablecer su bienestar digital.\n\nEl usuario asume absoluta y total responsabilidad sobre las configuraciones de rigor elegidas y los bloqueos aplicados a sus propias aplicaciones y dispositivo. El equipo desarrollador declina toda responsabilidad por cualquier inconveniente, pérdida de información, o estado de incomunicación temporal que derive de las restricciones que el usuario haya configurado.\n\nAl aceptar estos términos, usted reconoce que EnfocaApp actuará sin concesiones de acuerdo a los límites impuestos.</string>
+    <string name="onboarding_contract_btn_understood">ENTENDIDO</string>
+
+    <!-- RealityRevealScreen -->
+    <string name="onboarding_reveal_title">Creías que eran %1$dh...</string>
+    <string name="onboarding_reveal_subtitle_1">pero pasas </string>
+    <string name="onboarding_reveal_subtitle_2"> diarias.</string>
+    <string name="onboarding_reveal_cta_desc">El primer paso hacia el control</string>
+    <string name="onboarding_reveal_time_usage">TIEMPO DE USO</string>
+    <string name="onboarding_reveal_today">hoy</string>
+    <string name="onboarding_reveal_unlocks">DESBLOQUEOS</string>
+
+    <!-- UsageEstimationScreen -->
+    <string name="onboarding_usage_title">Seamos honestos...</string>
+    <string name="onboarding_usage_subtitle">¿Cuánto tiempo crees que usas tu celular al día?</string>
+    <string name="onboarding_usage_1h">1h</string>
+    <string name="onboarding_usage_12h">12h</string>
+    <string name="onboarding_usage_compare_text">Compararemos esto con tus datos reales más adelante.</string>
+    <string name="onboarding_usage_sheet_title">Análisis de Realidad</string>
+    <string name="onboarding_usage_sheet_desc">Para ver qué tan cerca estuviste de la realidad, necesitamos que nos permitas ver tu tiempo de pantalla.</string>
+    <string name="onboarding_usage_sheet_disclaimer">(Tranquilo, todo se queda en tu dispositivo)</string>
+</resources>

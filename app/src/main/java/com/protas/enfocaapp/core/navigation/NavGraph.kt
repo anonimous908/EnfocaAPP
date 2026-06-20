@@ -10,13 +10,29 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.protas.enfocaapp.ui.screens.onboarding.OnboardingPagerScreen
+import com.protas.enfocaapp.ui.screens.splash.SplashScreen
+import com.protas.enfocaapp.ui.screens.intervention.FutureMessageInterventionScreen
 
 @Composable
 fun EnfocaNavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = Screen.OnboardingWelcome.route
+        startDestination = Screen.Splash.route
     ) {
+        composable(Screen.Splash.route) {
+            SplashScreen(
+                onNavigateToOnboarding = {
+                    navController.navigate(Screen.OnboardingWelcome.route) {
+                        popUpTo(Screen.Splash.route) { inclusive = true }
+                    }
+                },
+                onNavigateToMain = {
+                    navController.navigate(Screen.Main.route) {
+                        popUpTo(Screen.Splash.route) { inclusive = true }
+                    }
+                }
+            )
+        }
         composable(Screen.OnboardingWelcome.route) {  //start Destinatation
             OnboardingPagerScreen(
                 onFinishOnboarding = {
@@ -27,7 +43,17 @@ fun EnfocaNavGraph(navController: NavHostController) {
             )
         }
         composable(Screen.Main.route) {
-            com.protas.enfocaapp.ui.screens.main.MainScreen()
+            com.protas.enfocaapp.ui.screens.main.MainScreen(
+                onNavigateToIntervention = {
+                    navController.navigate(Screen.Intervention.route)
+                }
+            )
+        }
+        composable(Screen.Intervention.route) {
+            FutureMessageInterventionScreen(
+                onFollowAdvice = { navController.popBackStack() },
+                onIgnoreAndContinue = { navController.popBackStack() }
+            )
         }
     }
 }

@@ -13,6 +13,8 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
+import androidx.compose.ui.res.stringResource
+import com.protas.enfocaapp.R
 import com.protas.enfocaapp.core.model.TodayUsageStats
 
 @Composable
@@ -53,7 +55,7 @@ fun RealityRevealScreen(
                     .padding(bottom = 32.dp)
             ) {
                 Text(
-                    text = "Creías que eran ${estimatedHours}h...",
+                    text = stringResource(id = R.string.onboarding_reveal_title, estimatedHours),
                     style = MaterialTheme.typography.displaySmall.copy(
                         fontWeight = FontWeight.Light,
                         letterSpacing = (-0.02).em,
@@ -69,7 +71,7 @@ fun RealityRevealScreen(
                                 color = MaterialTheme.colorScheme.onBackground,
                                 fontWeight = FontWeight.Medium
                             )
-                        ) { append("pero pasas ") }
+                        ) { append(stringResource(id = R.string.onboarding_reveal_subtitle_1)) }
                         withStyle(SpanStyle(color = MaterialTheme.colorScheme.primaryContainer)) {
                             append(realUsageStats.formattedTime)
                         }
@@ -78,7 +80,7 @@ fun RealityRevealScreen(
                                 color = MaterialTheme.colorScheme.onBackground,
                                 fontWeight = FontWeight.Medium
                             )
-                        ) { append(" diarias.") }
+                        ) { append(stringResource(id = R.string.onboarding_reveal_subtitle_2)) }
                     },
                     style = MaterialTheme.typography.displaySmall.copy(
                         letterSpacing = (-0.02).em,
@@ -110,22 +112,23 @@ fun RealityRevealScreen(
             ) {
                 Button(
                     onClick = onContinue,
-                    modifier = Modifier.fillMaxWidth().height(60.dp),
-                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier.fillMaxWidth().height(56.dp),
+                    shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.onBackground,
-                        contentColor = MaterialTheme.colorScheme.background
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                     ),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                 ) {
                     Text(
-                        text = "Enfrentar realidad",
-                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium)
+                        text = stringResource(id = R.string.onboarding_btn_face_reality),
+                        fontSize = 14.sp,
+                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold)
                     )
                 }
                 Spacer(Modifier.height(12.dp))
                 Text(
-                    text = "El primer paso hacia el control",
+                    text = stringResource(id = R.string.onboarding_reveal_cta_desc),
                     style = MaterialTheme.typography.labelSmall.copy(
                         letterSpacing = 0.05.em,
                         fontWeight = FontWeight.Light
@@ -157,7 +160,7 @@ private fun TimeCard(hours: Int, minutes: Int) {
     ) {
         // Label
         Text(
-            text = "TIEMPO DE USO",
+            text = stringResource(id = R.string.onboarding_reveal_time_usage),
             style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.1.em),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.align(Alignment.TopStart)
@@ -180,7 +183,7 @@ private fun TimeCard(hours: Int, minutes: Int) {
             )
             Spacer(Modifier.width(8.dp))
             Text(
-                text = "hoy",
+                text = stringResource(id = R.string.onboarding_reveal_today),
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Light),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(bottom = 8.dp)
@@ -234,7 +237,7 @@ private fun UnlocksCard(count: Int) {
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
-                text = "DESBLOQUEOS",
+                text = stringResource(id = R.string.onboarding_reveal_unlocks),
                 style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.1.em),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

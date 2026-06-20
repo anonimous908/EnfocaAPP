@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -17,13 +18,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
+import androidx.compose.ui.res.stringResource
+import com.protas.enfocaapp.R
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UsageEstimationScreen(
     onPermissionGranted: (Int) -> Unit = {},
-    onOmitir: () -> Unit = {}
+    onOmitir: () -> Unit = {},
+    onBack: () -> Unit = {}
 ) {
     var sliderValue by remember { mutableFloatStateOf(4f) }
     val hours = sliderValue.roundToInt()
@@ -59,6 +63,20 @@ fun UsageEstimationScreen(
                 )
         )
 
+        // Botón flotante para regresar a la página anterior
+        IconButton(
+            onClick = onBack,
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(start = 8.dp, top = 24.dp) // SafeArea padding
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = stringResource(id = R.string.onboarding_btn_back),
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -67,7 +85,7 @@ fun UsageEstimationScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Seamos honestos...",
+                text = stringResource(id = R.string.onboarding_usage_title),
                 style = MaterialTheme.typography.displaySmall.copy(
                     fontWeight = FontWeight.Bold,
                     letterSpacing = (-0.02).em,
@@ -78,7 +96,7 @@ fun UsageEstimationScreen(
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                text = "¿Cuánto tiempo crees que usas tu celular al día?",
+                text = stringResource(id = R.string.onboarding_usage_subtitle),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
@@ -130,17 +148,22 @@ fun UsageEstimationScreen(
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text("1h", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text("12h", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(stringResource(id = R.string.onboarding_usage_1h), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(stringResource(id = R.string.onboarding_usage_12h), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
 
-                val (feedbackText, feedbackColor) = remember(hours) {
+                val conscious = stringResource(id = R.string.onboarding_level_conscious)
+                val average = stringResource(id = R.string.onboarding_level_average)
+                val high = stringResource(id = R.string.onboarding_level_high)
+                val critical = stringResource(id = R.string.onboarding_level_critical)
+
+                val (feedbackText, feedbackColor) = remember(hours, conscious, average, high, critical) {
                     when {
-                        hours <= 2  -> "Nivel: Monje Tibetano"       to Color(0xFFC6C6C7)
-                        hours <= 5  -> "Nivel: Promedio Habitual"    to Color(0xFF8D90A2)
-                        hours <= 8  -> "Nivel: Usuario Intensivo"    to Color(0xFFFFB4AB)
-                        else        -> "Nivel: Conectado a la Matrix" to Color(0xFFFF6B6B)
+                        hours <= 2  -> conscious  to Color(0xFFC6C6C7)
+                        hours <= 5  -> average    to Color(0xFF8D90A2)
+                        hours <= 8  -> high       to Color(0xFFFFB4AB)
+                        else        -> critical   to Color(0xFFFF6B6B)
                     }
                 }
                 AnimatedContent(
@@ -162,14 +185,15 @@ fun UsageEstimationScreen(
             Button(
                 onClick = { showSheet = true },
                 modifier = Modifier.fillMaxWidth().height(56.dp),
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             ) {
                 Text(
-                    text = "confirmar",
+                    text = stringResource(id = R.string.onboarding_btn_confirm),
+                    fontSize = 14.sp,
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
                 )
                 Spacer(Modifier.width(8.dp))
@@ -179,7 +203,7 @@ fun UsageEstimationScreen(
             Spacer(Modifier.height(16.dp))
 
             Text(
-                text = "Compararemos esto con tus datos reales más adelante.",
+                text = stringResource(id = R.string.onboarding_usage_compare_text),
                 style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.05.em),
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                 textAlign = TextAlign.Center
@@ -314,7 +338,7 @@ fun RealityAnalysisSheet(
 
             // ── Copy ──────────────────────────────────────────────────────
             Text(
-                text = "Análisis de Realidad",
+                text = stringResource(id = R.string.onboarding_usage_sheet_title),
                 style = MaterialTheme.typography.headlineSmall.copy(
                     fontWeight = FontWeight.SemiBold,
                     letterSpacing = (-0.01).em
@@ -326,8 +350,7 @@ fun RealityAnalysisSheet(
             Spacer(Modifier.height(8.dp))
 
             Text(
-                text = "Para ver qué tan cerca estuviste de la realidad, " +
-                       "necesitamos que nos permitas ver tu tiempo de pantalla.",
+                text = stringResource(id = R.string.onboarding_usage_sheet_desc),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
@@ -337,7 +360,7 @@ fun RealityAnalysisSheet(
             Spacer(Modifier.height(8.dp))
 
             Text(
-                text = "(Tranquilo, todo se queda en tu dispositivo)",
+                text = stringResource(id = R.string.onboarding_usage_sheet_disclaimer),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
                 textAlign = TextAlign.Center
@@ -348,16 +371,17 @@ fun RealityAnalysisSheet(
             // ── Botón primario ─────────────────────────────────────────────
             Button(
                 onClick = onConfirm,
-                modifier = Modifier.fillMaxWidth().height(48.dp),
-                shape = RoundedCornerShape(4.dp),
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             ) {
                 Text(
-                    text = "DESCUBRIR LA VERDAD",
-                    style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.05.em)
+                    text = stringResource(id = R.string.onboarding_btn_discover_truth),
+                    fontSize = 14.sp,
+                    style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.05.em, fontWeight = FontWeight.SemiBold)
                 )
             }
 
@@ -366,8 +390,8 @@ fun RealityAnalysisSheet(
             // ── Botón secundario ───────────────────────────────────────────
             OutlinedButton(
                 onClick = { onDismiss(); onOmitir() },
-                modifier = Modifier.fillMaxWidth().height(48.dp),
-                shape = RoundedCornerShape(4.dp),
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                shape = RoundedCornerShape(12.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                 colors = ButtonDefaults.outlinedButtonColors(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -375,8 +399,9 @@ fun RealityAnalysisSheet(
                 )
             ) {
                 Text(
-                    text = "OMITIR",
-                    style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.05.em)
+                    text = stringResource(id = R.string.onboarding_btn_skip),
+                    fontSize = 14.sp,
+                    style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.05.em, fontWeight = FontWeight.SemiBold)
                 )
             }
         }

@@ -17,16 +17,31 @@ import com.protas.enfocaapp.core.navigation.EnfocaNavGraph
 import com.protas.enfocaapp.ui.theme.EnfocaAPPTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+import android.view.ViewGroup
+
+// @AndroidEntryPoint le indica a Hilt que esta pantalla recibirá inyección de dependencias (objetos globales).
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Parche para evitar el crasheo de "Splitting motion events" en Jetpack Compose
+        window.decorView.findViewById<ViewGroup>(android.R.id.content).isMotionEventSplittingEnabled = false
+        
+        // Dibuja la app debajo de la barra de estado y de navegación (diseño inmersivo / sin bordes)
         enableEdgeToEdge()
+        
+        // Define que la interfaz gráfica se construirá con código (Jetpack Compose) en lugar de XML
         setContent {
+            // Aplica nuestra paleta de colores y fuentes personalizada
             EnfocaAPPTheme {
+                // Crea el controlador principal que nos permite saltar de una pantalla a otra
                 val navController = rememberNavController()
+                
+                // Scaffold es el "andamiaje" de la pantalla. Nos da los márgenes seguros (innerPadding)
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
+                        // Carga el mapa de rutas de la app (Splash -> Onboarding -> Main)
                         EnfocaNavGraph(navController = navController)
                     }
                 }

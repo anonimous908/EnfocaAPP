@@ -14,6 +14,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
@@ -45,6 +50,8 @@ fun OnboardingPagerScreen(
     HorizontalPager(
         state = pagerState,
         modifier = Modifier.fillMaxSize(),
+        // Desactiva swipe en pág 1 para forzar permisos, y usamos el botón Back
+        userScrollEnabled = pagerState.currentPage != 1,
         beyondViewportPageCount = 1 // Mantiene la página adyacente pre-cargada para una transición fluida
     ) { page ->
         when (page) {
@@ -67,6 +74,9 @@ fun OnboardingPagerScreen(
                 },
                 onOmitir = {
                     coroutineScope.launch { pagerState.animateScrollToPage(3) }
+                },
+                onBack = {
+                    coroutineScope.launch { pagerState.animateScrollToPage(0) }
                 }
             )
 
@@ -89,6 +99,7 @@ fun OnboardingPagerScreen(
             // Página 4: Contrato de Compromiso y Cierre
             4 -> OnboardingContractScreen(
                 onFirmarContrato = {
+                    viewModel.completeOnboarding()
                     onFinishOnboarding()
                 },
                 onAtras = {

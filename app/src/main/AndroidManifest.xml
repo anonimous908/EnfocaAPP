@@ -14,6 +14,15 @@
     <!-- Ignorar Optimización de Batería (evita que el sistema cierre la app en segundo plano) -->
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
+    <!-- Foreground Service permissions -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+
+    <!-- Permiso para ver todas las apps instaladas (necesario en Android 11+) -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" tools:ignore="QueryAllPackagesPermission" />
+
+    <!-- Configuración global de la aplicación. 
+         allowBackup="false" deshabilita copias en la nube para mantener todo local (Zero-Cloud) -->
     <application
         android:name=".EnfocaApplication"
         android:allowBackup="false"
@@ -24,17 +33,42 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EnfocaAPP" >
+        
+        <!-- Actividad única de la aplicación (Single Activity Architecture) -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.EnfocaAPP" >
+            
+            <!-- Define esta actividad como la pantalla de inicio principal al abrir la aplicación -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".core.service.EnfocaTrackerService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property 
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" 
+                android:value="Digital Wellbeing tracking and app limit enforcement" />
+        </service>
+
+        <service
+            android:name=".core.service.EnfocaAccessibilityService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
     </application>
 
 </manifest>

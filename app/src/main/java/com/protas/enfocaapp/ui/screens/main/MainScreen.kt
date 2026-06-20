@@ -4,9 +4,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -32,24 +33,27 @@ sealed class BottomNavItem(
     val icon: ImageVector
 ) {
     object Home : BottomNavItem(Screen.Home.route, R.string.nav_home, Icons.Default.Home)
-    object Stats : BottomNavItem(Screen.Stats.route, R.string.nav_stats, Icons.Default.List)
     object AppBlock : BottomNavItem(Screen.AppBlock.route, R.string.nav_app_block, Icons.Default.Lock)
+    object Stats : BottomNavItem(Screen.Stats.route, R.string.nav_stats, Icons.Default.BarChart)
     object Settings : BottomNavItem(Screen.Settings.route, R.string.nav_settings, Icons.Default.Settings)
 }
 
 @Composable
-fun MainScreen() {
+fun MainScreen(onNavigateToIntervention: () -> Unit = {}) {
     val navController = rememberNavController()
     val items = listOf(
         BottomNavItem.Home,
-        BottomNavItem.Stats,
         BottomNavItem.AppBlock,
+        BottomNavItem.Stats,
         BottomNavItem.Settings
     )
 
     Scaffold(
+        contentWindowInsets = androidx.compose.foundation.layout.WindowInsets(0.dp),
         bottomBar = {
-            NavigationBar {
+            NavigationBar(
+                windowInsets = androidx.compose.foundation.layout.WindowInsets(0.dp)
+            ) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
 
@@ -82,10 +86,10 @@ fun MainScreen() {
                 navController = navController,
                 startDestination = Screen.Home.route
             ) {
-                composable(Screen.Home.route) { HomeEmptyScreen() }
+                composable(Screen.Home.route) { HomeScreen(onNavigateToIntervention = onNavigateToIntervention) }
                 composable(Screen.Stats.route) { StatsScreen() }
-                composable(Screen.AppBlock.route) { AppBlockEmptyScreen() }
-                composable(Screen.Settings.route) { SettingsEmptyScreen() }
+                composable(Screen.AppBlock.route) { AppBlockScreen() }
+                composable(Screen.Settings.route) { SettingsScreen() }
             }
         }
     }

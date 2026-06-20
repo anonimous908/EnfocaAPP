@@ -4,16 +4,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.protas.enfocaapp.core.model.TodayUsageStats
 import com.protas.enfocaapp.core.repository.AppUsageRepository
+import com.protas.enfocaapp.core.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
-    private val appUsageRepository: AppUsageRepository
+    private val appUsageRepository: AppUsageRepository,
+    private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
 
     private val _estimatedHours = MutableStateFlow(4)
@@ -42,8 +45,15 @@ class OnboardingViewModel @Inject constructor(
     }
 
     private fun loadRealUsageStats() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _realUsageStats.value = appUsageRepository.getTodayUsageStats()
+        }
+    }
+
+    fun completeOnboarding(nivelRigor: com.protas.enfocaapp.core.model.NivelRigor = com.protas.enfocaapp.core.model.NivelRigor.ESTRICTO) {
+        viewModelScope.launch(Dispatchers.IO) {
+            userPreferencesRepository.saveNivelRigor(nivelRigor)
+            userPreferencesRepository.saveOnboardingCompleted(true)
         }
     }
 }

@@ -9,6 +9,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+data class RawAppUsage(val packageName: String, val timeMs: Long)
+
 /**
  * Abstraction over [UsageStatsManager] that returns primitive aggregates,
  * enabling unit testing without Android framework dependencies.
@@ -22,6 +24,12 @@ interface UsageStatsDataSource {
 
     /** Returns count of [UsageEvents.Event.KEYGUARD_HIDDEN] events in [startTime..endTime]. */
     fun queryKeyguardHiddenCount(startTime: Long, endTime: Long): Int
+
+    /** Returns the top [limit] apps sorted by foreground time. */
+    fun queryTopApps(startTime: Long, endTime: Long, limit: Int): List<RawAppUsage>
+
+    /** Returns the total foreground time in ms for a specific package in [startTime..endTime]. */
+    fun queryAppUsage(packageName: String, startTime: Long, endTime: Long): Long
 }
 
 @Singleton
@@ -31,6 +39,22 @@ class RealUsageStatsDataSource @Inject constructor(
 
     private val usageStatsManager: UsageStatsManager
         get() = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+
+    private var lastQueryTime = 0L
+    private var lastStartTime = 0L
+    private var cachedUsageMap: Map<String, android.app.usage.UsageStats> = emptyMap()
+
+    @Synchronized
+    private fun getAggregatedUsageMap(startTime: Long, endTime: Long): Map<String, android.app.usage.UsageStats> {
+        val now = System.currentTimeMillis()
+        // Cache valid for 15 seconds to prevent melting the CPU on loops
+        if (now - lastQueryTime > 15_000L || startTime != lastStartTime || cachedUsageMap.isEmpty()) {
+            cachedUsageMap = usageStatsManager.queryAndAggregateUsageStats(startTime, endTime)
+            lastQueryTime = now
+            lastStartTime = startTime
+        }
+        return cachedUsageMap
+    }
 
     override fun hasUsageStatsPermission(): Boolean {
         val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
@@ -43,7 +67,7 @@ class RealUsageStatsDataSource @Inject constructor(
     }
 
     override fun queryTotalForegroundTimeMs(startTime: Long, endTime: Long): Long {
-        val appUsageMap = usageStatsManager.queryAndAggregateUsageStats(startTime, endTime)
+        val appUsageMap = getAggregatedUsageMap(startTime, endTime)
         return appUsageMap.values.sumOf { it.totalTimeInForeground }
     }
 
@@ -58,5 +82,22 @@ class RealUsageStatsDataSource @Inject constructor(
             }
         }
         return count
+    }
+
+    override fun queryTopApps(startTime: Long, endTime: Long, limit: Int): List<RawAppUsage> {
+        val appUsageMap = getAggregatedUsageMap(startTime, endTime)
+        
+        return appUsageMap.values
+            .filter { it.totalTimeInForeground > 0 }
+            .sortedByDescending { it.totalTimeInForeground }
+            .map { usageStats ->
+                RawAppUsage(usageStats.packageName, usageStats.totalTimeInForeground)
+            }
+            .take(limit)
+    }
+
+    override fun queryAppUsage(packageName: String, startTime: Long, endTime: Long): Long {
+        val appUsageMap = getAggregatedUsageMap(startTime, endTime)
+        return appUsageMap[packageName]?.totalTimeInForeground ?: 0L
     }
 }
