@@ -39,8 +39,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.protas.enfocaapp.ui.theme.DopaminaSurfaceContainerHighest
-import com.protas.enfocaapp.ui.theme.DopaminaSurfaceContainerLow
 import com.protas.enfocaapp.ui.theme.EnfocaAPPTheme
 import kotlinx.coroutines.delay
 import androidx.compose.ui.res.stringResource
@@ -107,23 +105,23 @@ fun OnboardingContractScreen(
                     val textColor = MaterialTheme.colorScheme.onSurfaceVariant
                     val annotatedText = buildAnnotatedString {
                         withStyle(SpanStyle(color = textColor)) {
-                            append("Al marcar esta casilla, acepto formalmente la ")
+                            append(stringResource(id = R.string.onboarding_contract_terms_1))
                         }
                         pushStringAnnotation(tag = "privacy", annotation = "privacy")
                         withStyle(SpanStyle(color = primaryColor, fontWeight = FontWeight.Bold)) {
-                            append("Política de Privacidad")
+                            append(stringResource(id = R.string.onboarding_contract_privacy_policy))
                         }
                         pop()
                         withStyle(SpanStyle(color = textColor)) {
-                            append(" y los ")
+                            append(stringResource(id = R.string.onboarding_contract_terms_2))
                         }
                         pushStringAnnotation(tag = "terms", annotation = "terms")
                         withStyle(SpanStyle(color = primaryColor, fontWeight = FontWeight.Bold)) {
-                            append("Términos de Servicio")
+                            append(stringResource(id = R.string.onboarding_contract_terms_of_service))
                         }
                         pop()
                         withStyle(SpanStyle(color = textColor)) {
-                            append(".")
+                            append(stringResource(id = R.string.onboarding_contract_terms_3))
                         }
                     }
                     ClickableText(
@@ -149,7 +147,7 @@ fun OnboardingContractScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 val btnColor by animateColorAsState(
-                    targetValue = if (firmado) MaterialTheme.colorScheme.primaryContainer else DopaminaSurfaceContainerHighest,
+                    targetValue = if (firmado) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHighest,
                     animationSpec = tween(300),
                     label = "btnColor"
                 )
@@ -165,17 +163,17 @@ fun OnboardingContractScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
-                    shape = RoundedCornerShape(4.dp),
+                    shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = btnColor,
                         contentColor = btnTextColor,
-                        disabledContainerColor = DopaminaSurfaceContainerHighest,
+                        disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
                         disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 ) {
                     Text(
                         text = stringResource(id = R.string.onboarding_contract_btn_sign),
-                        fontSize = 12.sp,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold,
                         letterSpacing = 0.1.sp
                     )
@@ -196,16 +194,16 @@ fun OnboardingContractScreen(
 
         if (showPrivacyPolicy) {
             LegalDialog(
-                title = "Política de Privacidad",
-                text = "Dopamina Guard se compromete solemnemente a proteger su privacidad con el más alto rigor. Toda la información recopilada, incluyendo sus estadísticas de uso y patrones de comportamiento digital, se procesa de forma estrictamente local en su dispositivo.\n\nBajo ninguna circunstancia compartiremos, venderemos, rentaremos ni transferiremos sus datos a terceros. Los permisos de accesibilidad, uso de datos y superposición de pantalla son empleados única y exclusivamente para habilitar las funcionalidades de bloqueo e intervención de esta herramienta.\n\nAl otorgar estos permisos, usted comprende que son necesarios para el correcto funcionamiento del ecosistema de restricciones de la aplicación.",
+                title = stringResource(id = R.string.onboarding_contract_dialog_privacy_title),
+                text = stringResource(id = R.string.onboarding_contract_dialog_privacy_text),
                 onDismiss = { showPrivacyPolicy = false }
             )
         }
 
         if (showTermsOfService) {
             LegalDialog(
-                title = "Términos de Servicio",
-                text = "Al utilizar Dopamina Guard, usted acepta someterse a todas las restricciones y límites establecidos de manera voluntaria dentro de la aplicación. Esta es una herramienta de grado estricto diseñada para potenciar su productividad y restablecer su bienestar digital.\n\nEl usuario asume absoluta y total responsabilidad sobre las configuraciones de rigor elegidas y los bloqueos aplicados a sus propias aplicaciones y dispositivo. El equipo desarrollador declina toda responsabilidad por cualquier inconveniente, pérdida de información, o estado de incomunicación temporal que derive de las restricciones que el usuario haya configurado.\n\nAl aceptar estos términos, usted reconoce que Dopamina Guard actuará sin concesiones de acuerdo a los límites impuestos.",
+                title = stringResource(id = R.string.onboarding_contract_dialog_terms_title),
+                text = stringResource(id = R.string.onboarding_contract_dialog_terms_text),
                 onDismiss = { showTermsOfService = false }
             )
         }
@@ -223,21 +221,29 @@ private fun ContratoHeader(onAtras: () -> Unit) {
                 color = MaterialTheme.colorScheme.outlineVariant,
                 shape = RoundedCornerShape(0.dp)
             )
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+            .padding(horizontal = 4.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
+        IconButton(onClick = onAtras) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                contentDescription = stringResource(id = R.string.onboarding_btn_back),
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+        }
 
+        Spacer(modifier = Modifier.weight(1f))
 
         Text(
             text = stringResource(id = R.string.app_name),
-            fontSize = 24.sp,
+            fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface,
-            letterSpacing = (-0.01).sp
+            letterSpacing = (-0.01).sp,
+            modifier = Modifier.padding(end = 48.dp) // Compensar visualmente el IconButton
         )
 
-        Spacer(modifier = Modifier.width(48.dp))
+        Spacer(modifier = Modifier.weight(1f))
     }
 }
 
@@ -368,10 +374,10 @@ private fun LegalDialog(title: String, text: String, onDismiss: () -> Unit) {
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text("ENTENDIDO", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                Text(stringResource(id = R.string.onboarding_contract_btn_understood), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
             }
         },
-        containerColor = DopaminaSurfaceContainerLow,
+        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
         titleContentColor = MaterialTheme.colorScheme.onSurface,
         textContentColor = MaterialTheme.colorScheme.onSurfaceVariant
     )

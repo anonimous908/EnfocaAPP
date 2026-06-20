@@ -9,40 +9,52 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = DopaminaPrimary,
-    primaryContainer = DopaminaPrimaryContainer,
-    background = DopaminaBackground,
-    surface = DopaminaBackground,
-    surfaceVariant = DopaminaSurfaceContainer,
-    onBackground = DopaminaOnBackground,
-    onSurfaceVariant = DopaminaOnSurfaceVariant,
-    outlineVariant = DopaminaOutlineVariant
+    primary = EnfocaPrimary,
+    onPrimary = EnfocaBackground,
+    primaryContainer = EnfocaPrimaryContainer,
+    onPrimaryContainer = EnfocaOnBackground,
+    secondary = EnfocaOnSurfaceVariant,
+    onSecondary = EnfocaBackground,
+    background = EnfocaBackground,
+    onBackground = EnfocaOnBackground,
+    surface = EnfocaBackground,
+    onSurface = EnfocaOnBackground,
+    surfaceVariant = EnfocaSurfaceContainer,
+    onSurfaceVariant = EnfocaOnSurfaceVariant,
+    outline = EnfocaSurfaceContainerHighest,
+    outlineVariant = EnfocaOutlineVariant,
+    error = Color(0xFFFFB4AB),
+    onError = Color(0xFF690005)
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+    primary = EnfocaLightPrimary,
     onPrimary = Color.White,
+    primaryContainer = EnfocaLightPrimaryContainer,
+    onPrimaryContainer = Color(0xFF001B3E),
+    secondary = EnfocaLightOnSurfaceVariant,
     onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    background = EnfocaLightBackground,
+    onBackground = EnfocaLightOnBackground,
+    surface = EnfocaLightSurface,
+    onSurface = EnfocaLightOnBackground,
+    surfaceVariant = EnfocaLightSurfaceContainer,
+    onSurfaceVariant = EnfocaLightOnSurfaceVariant,
+    outline = EnfocaLightOutline,
+    outlineVariant = EnfocaLightOutlineVariant,
+    error = Color(0xFFBA1A1A),
+    onError = Color.White
 )
 
 @Composable
 fun EnfocaAPPTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

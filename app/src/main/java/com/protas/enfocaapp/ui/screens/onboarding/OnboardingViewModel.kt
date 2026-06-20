@@ -2,27 +2,28 @@ package com.protas.enfocaapp.ui.screens.onboarding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.protas.enfocaapp.core.model.TodayUsageStats
 import com.protas.enfocaapp.core.repository.AppUsageRepository
+import com.protas.enfocaapp.core.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
-    private val appUsageRepository: AppUsageRepository
+    private val appUsageRepository: AppUsageRepository,
+    private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
 
     private val _estimatedHours = MutableStateFlow(4)
     val estimatedHours: StateFlow<Int> = _estimatedHours.asStateFlow()
 
-    private val _realHours = MutableStateFlow(0)
-    val realHours: StateFlow<Int> = _realHours.asStateFlow()
-
-    private val _unlocks = MutableStateFlow(0)
-    val unlocks: StateFlow<Int> = _unlocks.asStateFlow()
+    private val _realUsageStats = MutableStateFlow(TodayUsageStats(0, 0))
+    val realUsageStats: StateFlow<TodayUsageStats> = _realUsageStats.asStateFlow()
 
     private val _hasUsagePermission = MutableStateFlow(false)
     val hasUsagePermission: StateFlow<Boolean> = _hasUsagePermission.asStateFlow()
@@ -44,10 +45,15 @@ class OnboardingViewModel @Inject constructor(
     }
 
     private fun loadRealUsageStats() {
-        viewModelScope.launch {
-            val (hours, unlockCount) = appUsageRepository.getTodayUsageStats()
-            _realHours.value = hours
-            _unlocks.value = unlockCount
+        viewModelScope.launch(Dispatchers.IO) {
+            _realUsageStats.value = appUsageRepository.getTodayUsageStats()
+        }
+    }
+
+    fun completeOnboarding(nivelRigor: com.protas.enfocaapp.core.model.NivelRigor = com.protas.enfocaapp.core.model.NivelRigor.ESTRICTO) {
+        viewModelScope.launch(Dispatchers.IO) {
+            userPreferencesRepository.saveNivelRigor(nivelRigor)
+            userPreferencesRepository.saveOnboardingCompleted(true)
         }
     }
 }

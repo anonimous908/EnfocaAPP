@@ -14,21 +14,25 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun OnboardingPagerScreen(
     onFinishOnboarding: () -> Unit,
-    onRigorSelected: (NivelRigor) -> Unit = {}, // Callback para guardar el nivel elegido en DataStore/ViewModel
+    onOmitir: () -> Unit = {},
     viewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val estimatedHours by viewModel.estimatedHours.collectAsState()
-    val realHours by viewModel.realHours.collectAsState()
-    val unlocks by viewModel.unlocks.collectAsState()
+    val realUsageStats by viewModel.realUsageStats.collectAsState()
     val hasUsagePermission by viewModel.hasUsagePermission.collectAsState()
 
     // Definimos las  páginas del flujo de onboarding
-    val pagerState = rememberPagerState(pageCount = { 6 })
+    val pagerState = rememberPagerState(pageCount = { 5 })
     val coroutineScope = rememberCoroutineScope()
 
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -46,6 +50,8 @@ fun OnboardingPagerScreen(
     HorizontalPager(
         state = pagerState,
         modifier = Modifier.fillMaxSize(),
+        // Desactiva swipe en pág 1 para forzar permisos, y usamos el botón Back
+        userScrollEnabled = pagerState.currentPage != 1,
         beyondViewportPageCount = 1 // Mantiene la página adyacente pre-cargada para una transición fluida
     ) { page ->
         when (page) {
@@ -65,14 +71,19 @@ fun OnboardingPagerScreen(
                     } else {
                         coroutineScope.launch { pagerState.animateScrollToPage(2) }
                     }
+                },
+                onOmitir = {
+                    coroutineScope.launch { pagerState.animateScrollToPage(3) }
+                },
+                onBack = {
+                    coroutineScope.launch { pagerState.animateScrollToPage(0) }
                 }
             )
 
             // Página 2: Estadísticas de Realidad
             2 -> RealityRevealScreen(
                 estimatedHours = estimatedHours,
-                realHours = realHours,
-                unlocks = unlocks,
+                realUsageStats = realUsageStats,
                 onContinue = {
                     coroutineScope.launch { pagerState.animateScrollToPage(3) }
                 }
@@ -85,21 +96,14 @@ fun OnboardingPagerScreen(
                 }
             )
 
-            // Página 4: Selección del Nivel de Rigor
-            4 -> OnboardingRigorScreen(
-                onEstablecerRigor = { nivel ->
-                    onRigorSelected(nivel) // Captura el nivel (MODERADO, ESTRICTO, QUIRÚRGICO) y lo propaga
-                    coroutineScope.launch { pagerState.animateScrollToPage(5) }
-                }
-            )
-
-            // Página 5: Contrato de Compromiso y Cierre
-            5 -> OnboardingContractScreen(
+            // Página 4: Contrato de Compromiso y Cierre
+            4 -> OnboardingContractScreen(
                 onFirmarContrato = {
+                    viewModel.completeOnboarding()
                     onFinishOnboarding()
                 },
                 onAtras = {
-                    coroutineScope.launch { pagerState.animateScrollToPage(4) }
+                    coroutineScope.launch { pagerState.animateScrollToPage(3) }
                 }
             )
         }

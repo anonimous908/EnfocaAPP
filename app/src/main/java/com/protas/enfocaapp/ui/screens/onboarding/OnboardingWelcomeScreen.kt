@@ -1,6 +1,7 @@
 package com.protas.enfocaapp.ui.screens.onboarding
 
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -19,6 +20,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -80,14 +83,22 @@ fun OnboardingWelcomeScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = stringResource(id = R.string.onboarding_introduccion_description),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Normal,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-                lineHeight = 24.sp
-            )
+            Surface(
+                modifier = Modifier
+                    .padding(top = 8.dp, bottom = 24.dp),
+                shape = RoundedCornerShape(12.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.onboarding_introduccion_description),
+                    modifier = Modifier.padding(16.dp),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    lineHeight = 24.sp
+                )
+            }
         }
 
         // ── Botón fijo en la parte inferior ──
@@ -102,7 +113,7 @@ fun OnboardingWelcomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = Color.White
@@ -110,7 +121,7 @@ fun OnboardingWelcomeScreen(
             ) {
                 Text(
                     text = stringResource(id = R.string.onboarding_next_button),
-                    fontSize = 12.sp,
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                     letterSpacing = 0.1.sp
                 )
@@ -156,21 +167,21 @@ private fun BiometricVisualizer() {
         // Hub central con ícono
         Box(
             modifier = Modifier
-                .size(96.dp)
+                .size(128.dp)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .border(1.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape),
             contentAlignment = Alignment.Center
         ) {
-            // Línea de escaneo animada sobre el ícono
-            ScanningOverlay()
-
             Image(
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = "Logo",
-                modifier = Modifier.size(64.dp)
+                modifier = Modifier.size(128.dp)
             )
         }
+
+        // Anillo de escaneo rotatorio alrededor del hub
+        ScannerRing()
     }
 }
 
@@ -209,7 +220,7 @@ private fun PulsingRing(delayMillis: Int) {
 
     Box(
         modifier = Modifier
-            .size(64.dp)
+            .size(160.dp)
             .scale(scale)
             .alpha(alpha)
             .border(
@@ -220,41 +231,41 @@ private fun PulsingRing(delayMillis: Int) {
     )
 }
 
-// ─── Línea de escaneo ─────────────────────────────────────────────────────────
+// ─── Anillo de escaneo rotatorio ─────────────────────────────────────────────
 @Composable
-private fun ScanningOverlay() {
-    val infiniteTransition = rememberInfiniteTransition(label = "scan")
+private fun ScannerRing() {
+    val primaryContainer = MaterialTheme.colorScheme.primaryContainer
+    val infiniteTransition = rememberInfiniteTransition(label = "scanner_ring")
 
-    val offsetY by infiniteTransition.animateFloat(
-        initialValue = -1f,
-        targetValue = 1f,
+    val rotation by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 2000, easing = LinearEasing),
+            animation = tween(durationMillis = 3000, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
         ),
-        label = "scanY"
+        label = "rotation"
     )
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .clip(CircleShape)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(24.dp)
-                .align(Alignment.Center)
-                .offset(y = (offsetY * 48).dp)
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            Color.Transparent,
-                            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.8f),
-                            Color.Transparent
-                        )
-                    )
+    Canvas(modifier = Modifier.size(144.dp)) {
+        val sweepAngle = 120f
+        val startAngle = rotation - sweepAngle / 2f
+        val strokePx = 3.dp.toPx()
+
+        drawArc(
+            brush = Brush.sweepGradient(
+                colors = listOf(
+                    Color.Transparent,
+                    primaryContainer.copy(alpha = 0.6f),
+                    primaryContainer.copy(alpha = 0.9f),
+                    primaryContainer.copy(alpha = 0.6f),
+                    Color.Transparent
                 )
+            ),
+            startAngle = startAngle,
+            sweepAngle = sweepAngle,
+            useCenter = false,
+            style = Stroke(width = strokePx, cap = StrokeCap.Round)
         )
     }
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- EnfocaNotificationManager -->
+    <string name="notification_channel_name">Enfoca Tracker</string>
+    <string name="notification_channel_description">Notificación persistente para seguimiento de uso y bloqueos</string>
+    <string name="persistent_notification_title">EnfocaApp Activo</string>
+    <string name="persistent_notification_text">Registrando actividad en segundo plano</string>
+    <string name="session_warning_title">Aviso de sesión</string>
+    <string name="session_warning_text">Has estado usando el teléfono por más de %1$d minutos.</string>
+    <string name="daily_warning_title">Aviso diario</string>
+    <string name="daily_warning_text">Llevas más de %1$d horas de uso en pantalla hoy.</string>
+    <string name="unlocks_warning_title">Demasiados desbloqueos</string>
+    <string name="unlocks_warning_text">Has desbloqueado el teléfono más de %1$d veces hoy.</string>
+
+    <!-- SplashScreen -->
+    <string name="splash_logo_content_desc">EnfocaAPP logo</string>
+    <string name="splash_slogan">Recupera el control</string>
+    <string name="splash_studio_logo_content_desc">Ztrene Studios logo</string>
+</resources>

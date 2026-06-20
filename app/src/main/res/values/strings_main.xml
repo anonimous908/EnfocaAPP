@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- AppBlockScreen -->
+    <string name="app_block_no_restrictions">Aún no has agregado ninguna restricción.</string>
+    <string name="app_block_category_limits">Límites de Categoría</string>
+    <string name="app_block_new_rule">NUEVA REGLA</string>
+    <string name="app_block_status_active">BLOQUEO ACTIVO</string>
+    <string name="app_block_status_monitoring">MONITOREANDO</string>
+    <string name="app_block_status_warning">ADVERTENCIA</string>
+    <string name="app_block_more_options">Más opciones</string>
+    <string name="app_block_modify_limit">Modificar límite</string>
+    <string name="app_block_delete">Eliminar</string>
+    <string name="app_block_usage_format">USO: %1$dM</string>
+    <string name="app_block_limit_format">LÍMITE: %1$dM</string>
+    <string name="app_block_no_active_blocks">Sin bloqueos activos</string>
+    <string name="enfocaapp_title">EnfocaApp</string>
+
+    <!-- MainScreens -->
+    <string name="enfocapp_title">Enfocapp</string>
+
+    <!-- SettingsScreen -->
+    <string name="settings_control_enfoque">Control de Enfoque</string>
+    <string name="settings_arquitecta_entorno">Arquitecta tu entorno.</string>
+    <string name="settings_friccion_adaptativa">Fricción Adaptativa</string>
+    <string name="settings_friccion_adaptativa_desc">Aumenta dinámicamente la resistencia según los patrones de uso.</string>
+    <string name="settings_restriccion_nocturna">Restricción Nocturna</string>
+    <string name="settings_restriccion_nocturna_desc">Protocolos de bloqueo agresivo entre las 22:00 y las 06:00.</string>
+    <string name="settings_limites_aplicaciones">Límites de Aplicaciones</string>
+    <string name="settings_limites_aplicaciones_desc">Aplica límites estrictos en aplicaciones específicas.</string>
+    <string name="settings_intensidad_friccion">Intensidad de Fricción</string>
+    <string name="settings_nivel_format">NIVEL %1$d</string>
+    <string name="settings_vectores_monitoreados">Vectores Monitoreados</string>
+    <string name="settings_vectores_desc">Aplicaciones de alto riesgo bajo protocolo estricto.</string>
+    <string name="settings_anadir_aplicacion">AÑADIR APLICACIÓN</string>
+    
+    <string name="settings_friccion_desc_1">En el Nivel 1, recordatorios visuales promueven la atención plena antes de abrir apps.</string>
+    <string name="settings_friccion_desc_2">En el Nivel 2, se aplica un retraso de 5 segundos antes de abrir apps restringidas.</string>
+    <string name="settings_friccion_desc_3">En el Nivel 3, debes completar un ejercicio de respiración antes del acceso.</string>
+    <string name="settings_friccion_desc_4">En el Nivel 4, abrir apps restringidas requiere una espera intencional de 15 segundos y escribir una frase de compromiso aleatoria.</string>
+    <string name="settings_friccion_desc_5">En el Nivel 5, bloqueo severo. El acceso requiere escaneo de etiqueta NFC física ubicada en otra habitación.</string>
+
+    <string name="app_musica">Música</string>
+    <string name="app_instagram">Instagram</string>
+    <string name="app_juegos">Juegos</string>
+    <string name="risk_critical">Riesgo Crítico</string>
+    <string name="risk_moderate">Riesgo Moderado</string>
+    <string name="risk_low">Riesgo Bajo</string>
+    <string name="limit_30m">30m Límite</string>
+    <string name="limit_blocked">Bloqueada</string>
+
+    <!-- AppPickerBottomSheet -->
+    <string name="app_picker_select_app">Seleccionar App</string>
+    <string name="app_picker_search">Buscar...</string>
+    <string name="app_picker_limit_to_format">Limitar uso a: %1$d minutos diarios</string>
+    <string name="app_picker_back">Atrás</string>
+    <string name="app_picker_save">Guardar</string>
+
+    <!-- DashboardView -->
+    <string name="dashboard_current_state">ESTADO ACTUAL</string>
+    <string name="dashboard_score">PUNTAJE</string>
+    <string name="dashboard_score_explanation">Pierdes 1 punto al desbloquear el celular y 5 por cada hora de uso</string>
+    <string name="dashboard_daily_unlocks">DESBLOQUEOS DIARIOS</string>
+    <string name="dashboard_hours_of_use">HORAS DE USO</string>
+    <string name="dashboard_active_distractions">DISTRACCIONES ACTIVAS</string>
+    <string name="dashboard_action_required">Acción Requerida</string>
+    <string name="dashboard_today_format">%1$s hoy</string>
+    <string name="dashboard_correct">CORREGIR</string>
+
+    <!-- MissingPermissionsView -->
+    <string name="permissions_overlay">Superposición</string>
+    <string name="permissions_overlay_desc">Muestra bloqueos sobre otras apps.</string>
+    <string name="permissions_notifications">Notificaciones</string>
+    <string name="permissions_notifications_desc">Recibe alertas de tus límites.</string>
+    <string name="permissions_usage_stats">Uso de apps</string>
+    <string name="permissions_usage_stats_desc">Mide tu tiempo en pantalla.</string>
+    <string name="permissions_battery">Batería libre</string>
+    <string name="permissions_battery_desc">Evita cierres inesperados.</string>
+    <string name="permissions_accessibility">Accesibilidad</string>
+    <string name="permissions_accessibility_desc">Requerido para bloquear aplicaciones.</string>
+
+    <!-- StatsScreen -->
+    <string name="stats_permitir">Permitir</string>
+
+    <!-- InterventionScreen -->
+    <string name="intervention_header_title">Intervención: Mensaje del Futuro</string>
+    <string name="intervention_header_subtitle">Protocolo Cognitivo: Sesgo del Yo Futuro Activado</string>
+    <string name="intervention_incoming_transmission">TRANSMISIÓN ENTRANTE</string>
+    <string name="intervention_from_future_format">De: Tú (T+%1$d mins)</string>
+    <string name="intervention_future_projection_desc">Proyección del yo futuro</string>
+    <string name="intervention_message_format">\u201C%1$s\u201D</string>
+    <string name="intervention_projected_trajectory">TRAYECTORIA PROYECTADA</string>
+    <string name="intervention_regret_index">Índice de Arrepentimiento Futuro</string>
+    <string name="intervention_regret_index_format">%1$d%%</string>
+    <string name="intervention_productivity_drop">Caída de Productividad</string>
+    <string name="intervention_productivity_drop_format">-%1$s hrs</string>
+    <string name="intervention_follow_advice">SEGUIR CONSEJO</string>
+    <string name="intervention_ignore_continue">IGNORAR Y CONTINUAR</string>
+    <string name="intervention_default_message">Tu yo del futuro se arrepentirá de estos 15 minutos. El golpe de dopamina es temporal, la interrupción del progreso es permanente. Mantén el rumbo.</string>
+    <string name="intervention_risk_high">Riesgo Alto</string>
+    <string name="intervention_default_warning">La rendición inmediata comprometerá tu arquitectura cognitiva a largo plazo.</string>
+
+    <!-- SimpleBlockOverlay -->
+    <string name="simple_block_title">BLOQUEADO</string>
+    <string name="simple_block_exit">Salir de la App</string>
+</resources>

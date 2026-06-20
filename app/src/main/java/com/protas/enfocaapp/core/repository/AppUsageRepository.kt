@@ -1,39 +1,38 @@
 package com.protas.enfocaapp.core.repository
 
-import android.app.AppOpsManager
-import android.app.usage.UsageEvents
-import android.app.usage.UsageStatsManager
 import android.content.Context
-import android.os.Process
+import android.os.Build
+import android.os.PowerManager
+import android.provider.Settings
+import androidx.core.app.NotificationManagerCompat
+import com.protas.enfocaapp.core.model.AppUsageItem
+import com.protas.enfocaapp.core.model.TodayUsageStats
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Calendar
+import com.protas.enfocaapp.core.utils.hasUsageStatsPermission
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class AppUsageRepository @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val usageStatsDataSource: UsageStatsDataSource
 ) {
 
     fun hasUsageStatsPermission(): Boolean {
-        val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-        val mode = appOps.unsafeCheckOpNoThrow(
-            AppOpsManager.OPSTR_GET_USAGE_STATS,
-            Process.myUid(),
-            context.packageName
-        )
-        return mode == AppOpsManager.MODE_ALLOWED
+        return context.hasUsageStatsPermission()
     }
 
     /**
-     * Devuelve un Pair: (Horas Totales de Pantalla, Número de Desbloqueos)
+     * Returns accurate usage stats for today using [UsageStatsDataSource].
+     *
+     * Uses [UsageStatsDataSource.queryTotalForegroundTimeMs] for real foreground time
+     * and [UsageStatsDataSource.queryKeyguardHiddenCount] for unlock count.
+     * No artificial inflation: 0 usage = "0h 0m", no minimum unlock count.
      */
-    fun getTodayUsageStats(): Pair<Int, Int> {
-        if (!hasUsageStatsPermission()) return Pair(0, 0)
+    fun getTodayUsageStats(): TodayUsageStats {
+        if (!hasUsageStatsPermission()) return TodayUsageStats(0, 0, emptyList())
 
-        val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-
-        // Set time range for today (from 00:00 to now)
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
@@ -42,44 +41,44 @@ class AppUsageRepository @Inject constructor(
         val startTime = calendar.timeInMillis
         val endTime = System.currentTimeMillis()
 
-        val events = usageStatsManager.queryEvents(startTime, endTime)
-        val event = UsageEvents.Event()
-
-        var totalInteractiveTimeMs = 0L
-        var unlocks = 0
-        var lastInteractiveTime = 0L
-
-        while (events.hasNextEvent()) {
-            events.getNextEvent(event)
-            when (event.eventType) {
-                UsageEvents.Event.SCREEN_INTERACTIVE -> {
-                    lastInteractiveTime = event.timeStamp
-                }
-                UsageEvents.Event.SCREEN_NON_INTERACTIVE -> {
-                    if (lastInteractiveTime > 0) {
-                        totalInteractiveTimeMs += (event.timeStamp - lastInteractiveTime)
-                        lastInteractiveTime = 0L
-                    }
-                }
-                UsageEvents.Event.KEYGUARD_HIDDEN -> {
-                    unlocks++
-                }
-            }
-        }
-
-        // Si la pantalla sigue encendida ahora, sumamos ese tiempo también
-        if (lastInteractiveTime > 0) {
-            totalInteractiveTimeMs += (endTime - lastInteractiveTime)
-        }
-
-        val totalHours = (totalInteractiveTimeMs / (1000 * 60 * 60)).toInt()
+        val totalForegroundMs = usageStatsDataSource.queryTotalForegroundTimeMs(startTime, endTime)
+        val unlocks = usageStatsDataSource.queryKeyguardHiddenCount(startTime, endTime)
+        val rawTopApps = usageStatsDataSource.queryTopApps(startTime, endTime, 10) // Extraemos 10 por si filtramos varias
+        val packageManager = context.packageManager
         
-        // Si hay tiempo de uso pero no llega a la hora, mostramos 1h por redondeo amigable, sino se vería 0h.
-        val displayHours = if (totalHours == 0 && totalInteractiveTimeMs > 0) 1 else totalHours
+        val topApps = rawTopApps.mapNotNull { rawUsage ->
+            val packageName = rawUsage.packageName
+            try {
+                val appInfo = packageManager.getApplicationInfo(packageName, 0)
+                // Ignorar la propia app (EnfocaApp)
+                if (packageName == context.packageName) return@mapNotNull null
+                
+                val appName = packageManager.getApplicationLabel(appInfo).toString()
+                AppUsageItem(packageName, appName, rawUsage.timeMs)
+            } catch (e: Exception) {
+                null
+            }
+        }.take(3) // Nos quedamos solo con el Top 3 final
 
-        // Evitar que devuelva 0 desbloqueos si sabemos que al menos abrió la app
-        val displayUnlocks = if (unlocks == 0) 1 else unlocks
-
-        return Pair(displayHours, displayUnlocks)
+        return TodayUsageStats(totalForegroundMs, unlocks, topApps)
     }
+
+    /**
+     * Returns the foreground time in milliseconds for a specific app for today.
+     */
+    fun getAppUsageToday(packageName: String): Long {
+        if (!hasUsageStatsPermission()) return 0L
+
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val startTime = calendar.timeInMillis
+        val endTime = System.currentTimeMillis()
+
+        return usageStatsDataSource.queryAppUsage(packageName, startTime, endTime)
+    }
+
+
 }
