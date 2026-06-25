@@ -12,6 +12,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -23,34 +24,64 @@ class EnfocaAccessibilityService : AccessibilityService() {
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     
-    // Lista local en memoria para chequeos rápidos
     private var activeRestrictions = listOf<com.protas.enfocaapp.core.model.AppRestriction>()
+    
+    // Caché ultra rápida de apps agotadas para bloqueo en 0 milisegundos
+    private var exhaustedApps = mutableSetOf<String>()
+
+    // Lista de launchers del sistema
+    private var launcherPackages = listOf<String>()
 
     override fun onServiceConnected() {
         super.onServiceConnected()
+        
+        val info = serviceInfo ?: return
+        info.packageNames = null // null significa que escucha a todos los paquetes
+        serviceInfo = info
+
+        // Detectar todos los launchers instalados para saber cuándo el usuario va al inicio
+        val intent = Intent(Intent.ACTION_MAIN).apply { addCategory(Intent.CATEGORY_HOME) }
+        val resolveInfos = packageManager.queryIntentActivities(intent, android.content.pm.PackageManager.MATCH_DEFAULT_ONLY)
+        launcherPackages = resolveInfos.map { it.activityInfo.packageName }
         
         // Observamos la base de datos en tiempo real
         serviceScope.launch {
             appRestrictionDao.getAllRestrictions().collectLatest { restrictions ->
                 activeRestrictions = restrictions
-                
-                // Extraemos solo los nombres de los paquetes que están activos
-                val packageList = restrictions
-                    .filter { it.enabled }
-                    .map { it.packageName }
-                    .toMutableList()
-                
-                // Agregamos nuestra propia app para asegurar que el arreglo nunca esté completamente vacío
-                // (Si es null, Android asume que queremos espiar TODOS los paquetes)
-                packageList.add(packageName)
-
-                // Actualizamos la configuración del servicio dinámicamente
-                val currentInfo = serviceInfo ?: return@collectLatest
-                currentInfo.packageNames = packageList.toTypedArray()
-                serviceInfo = currentInfo
+                // Al cambiar las restricciones, forzamos una actualización del caché
+                updateExhaustedCache()
+            }
+        }
+        
+        // Bucle en segundo plano que actualiza el caché de apps agotadas periódicamente
+        serviceScope.launch {
+            while (true) {
+                delay(60_000) // cada 60 segundos (ahorro de batería)
+                updateExhaustedCache()
             }
         }
     }
+    
+    private suspend fun updateExhaustedCache() {
+        val newExhausted = mutableSetOf<String>()
+        for (app in activeRestrictions) {
+            if (!app.enabled) continue
+            val limitMs = app.limitMinutes * 60_000L
+            if (limitMs == 0L) {
+                newExhausted.add(app.packageName)
+            } else {
+                val usageMs = appUsageRepository.getAppUsageToday(app.packageName)
+                if (usageMs >= limitMs) {
+                    newExhausted.add(app.packageName)
+                }
+            }
+        }
+        exhaustedApps = newExhausted
+    }
+
+    // Bypass temporal: después de resolver la intervención, dejar pasar la app por N segundos
+    private var bypassPackage: String? = null
+    private var bypassUntil: Long = 0L
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (event == null || event.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) return
@@ -58,30 +89,58 @@ class EnfocaAccessibilityService : AccessibilityService() {
         val packageName = event.packageName?.toString() ?: return
         
         if (packageName == "com.protas.enfocaapp") return
+        
+        // Ignorar la interfaz del sistema (teclado, volumen, barra de notificaciones)
+        // para que la ventana de intervención no se esconda y reaparezca parpadeando.
+        if (packageName.contains("systemui")) return
 
-        serviceScope.launch {
-            // Ya no buscamos en la base de datos en cada evento, usamos la lista en memoria
-            val restrictedApp = activeRestrictions.find { it.packageName == packageName && it.enabled }
-
-            if (restrictedApp != null) {
-                val usageMs = appUsageRepository.getAppUsageToday(packageName)
-                val limitMs = restrictedApp.limitMinutes * 60_000L
-                
-                if (usageMs >= limitMs) {
-                    launchMain {
-                        overlayManager.showOverlay(
-                            onClose = {
-                                performGlobalAction(GLOBAL_ACTION_HOME)
-                            }
-                        )
+        val restrictedApp = activeRestrictions.find { it.packageName == packageName && it.enabled }
+        if (restrictedApp != null) {
+            // Verificar si tiene bypass temporal (acaba de resolver la intervención)
+            if (packageName == bypassPackage && System.currentTimeMillis() < bypassUntil) {
+                return // Dejar pasar, ya resolvió el reto
+            }
+            
+            val limitMs = restrictedApp.limitMinutes * 60_000L
+            
+            // Si sabemos que está agotada (o límite es 0), bloqueamos
+            if (limitMs == 0L || exhaustedApps.contains(packageName)) {
+                // PRIMERO: Cerrar la app inmediatamente (mandarla al inicio)
+                performGlobalAction(GLOBAL_ACTION_HOME)
+                // DESPUÉS: Mostrar la pantalla de intervención
+                overlayManager.showOverlay(
+                    onClose = { performGlobalAction(GLOBAL_ACTION_HOME) },
+                    onSuccess = {
+                        // El usuario resolvió el reto: darle bypass temporal de 5 segundos
+                        bypassPackage = packageName
+                        bypassUntil = System.currentTimeMillis() + 5_000L
                     }
-                } else {
-                    launchMain { overlayManager.hideOverlay() }
-                }
+                )
             } else {
-                launchMain {
-                    overlayManager.hideOverlay()
+                // Si no está en el caché, hacemos la consulta a la base de datos.
+                serviceScope.launch {
+                    val usageMs = appUsageRepository.getAppUsageToday(packageName)
+                    if (usageMs >= limitMs) {
+                        exhaustedApps.add(packageName) // Lo metemos al caché rápido
+                        launchMain {
+                            performGlobalAction(GLOBAL_ACTION_HOME)
+                            overlayManager.showOverlay(
+                                onClose = { performGlobalAction(GLOBAL_ACTION_HOME) },
+                                onSuccess = {
+                                    bypassPackage = packageName
+                                    bypassUntil = System.currentTimeMillis() + 5_000L
+                                }
+                            )
+                        }
+                    } else {
+                        launchMain { overlayManager.hideOverlay() }
+                    }
                 }
+            }
+        } else {
+            if (launcherPackages.contains(packageName) && !overlayManager.isShowing()) {
+                // Esconder overlay solo si NO hay una intervención activa
+                overlayManager.hideOverlay()
             }
         }
     }

@@ -184,7 +184,7 @@ fun CognitiveCheckpointScreen(
                             .clip(RoundedCornerShape(topEnd = 4.dp, bottomEnd = 4.dp))
                             .background(CheckpointColors.SurfaceContainerHigh.copy(alpha = 0.3f))
                     ) {
-                        Row {
+                        Row(modifier = Modifier.height(IntrinsicSize.Min)) {
                             Box(
                                 modifier = Modifier
                                     .width(2.dp)
@@ -194,13 +194,15 @@ fun CognitiveCheckpointScreen(
                             Text(
                                 text = "“Tengo el control de mi atención.”",
                                 style = TextStyle(
-                                    fontSize = 24.sp,
-                                    lineHeight = 32.sp,
+                                    fontSize = 20.sp,
+                                    lineHeight = 28.sp,
                                     fontWeight = FontWeight.SemiBold
                                 ),
                                 color = CheckpointColors.OnSurface,
                                 textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(horizontal = 16.dp, vertical = 8.dp)
                             )
                         }
                     }
@@ -212,7 +214,8 @@ fun CognitiveCheckpointScreen(
                         value = input,
                         onValueChange = { input = it },
                         placeholder = { Text("Escribe la frase exactamente...", color = CheckpointColors.Outline) },
-                        singleLine = true,
+                        singleLine = false,
+                        maxLines = 2,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                         trailingIcon = {
                             Icon(
